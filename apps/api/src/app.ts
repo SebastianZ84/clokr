@@ -1,0 +1,86 @@
+import Fastify from "fastify";
+import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
+import jwt from "@fastify/jwt";
+import rateLimit from "@fastify/rate-limit";
+import swagger from "@fastify/swagger";
+import swaggerUi from "@fastify/swagger-ui";
+import { config } from "./config";
+import { authRoutes } from "./routes/auth";
+import { employeeRoutes } from "./routes/employees";
+import { timeEntryRoutes } from "./routes/time-entries";
+import { leaveRoutes } from "./routes/leave";
+import { overtimeRoutes } from "./routes/overtime";
+import { reportRoutes } from "./routes/reports";
+import { auditPlugin } from "./plugins/audit";
+import { prismaPlugin } from "./plugins/prisma";
+
+export async function buildApp() {
+  const app = Fastify({
+    logger: {
+      level: config.NODE_ENV === "production" ? "info" : "debug",
+      transport:
+        config.NODE_ENV !== "production"
+          ? { target: "pino-pretty", options: { colorize: true } }
+          : undefined,
+    },
+  });
+
+  // ── Security ──────────────────────────────────────────────
+  await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(cors, {
+    origin: config.CORS_ORIGIN,
+    credentials: true,
+  });
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: "1 minute",
+  });
+
+  // ── JWT ───────────────────────────────────────────────────
+  await app.register(jwt, {
+    secret: config.JWT_SECRET,
+    sign: { expiresIn: config.JWT_EXPIRES_IN },
+  });
+
+  // ── OpenAPI / Swagger ─────────────────────────────────────
+  await app.register(swagger, {
+    openapi: {
+      info: {
+        title: "Salon Timetrack API",
+        description: "Zeiterfassung & Urlaubsplanung API",
+        version: "1.0.0",
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+      },
+    },
+  });
+  await app.register(swaggerUi, {
+    routePrefix: "/docs",
+    uiConfig: { docExpansion: "list" },
+  });
+
+  // ── Plugins ───────────────────────────────────────────────
+  await app.register(prismaPlugin);
+  await app.register(auditPlugin);
+
+  // ── Routes ────────────────────────────────────────────────
+  await app.register(authRoutes,      { prefix: "/api/v1/auth" });
+  await app.register(employeeRoutes,  { prefix: "/api/v1/employees" });
+  await app.register(timeEntryRoutes, { prefix: "/api/v1/time-entries" });
+  await app.register(leaveRoutes,     { prefix: "/api/v1/leave" });
+  await app.register(overtimeRoutes,  { prefix: "/api/v1/overtime" });
+  await app.register(reportRoutes,    { prefix: "/api/v1/reports" });
+
+  // ── Health ────────────────────────────────────────────────
+  app.get("/health", async () => ({ status: "ok", timestamp: new Date().toISOString() }));
+
+  return app;
+}

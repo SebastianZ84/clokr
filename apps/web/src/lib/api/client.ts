@@ -1,0 +1,81 @@
+import { authStore } from "$stores/auth";
+import { get } from "svelte/store";
+
+const BASE_URL = "/api/v1";
+
+class ApiError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+    public data?: unknown
+  ) {
+    super(message);
+  }
+}
+
+async function request<T>(
+  path: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const auth = get(authStore);
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (auth.accessToken) {
+    headers["Authorization"] = `Bearer ${auth.accessToken}`;
+  }
+
+  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+
+  if (res.status === 401) {
+    // Token abgelaufen – versuche zu refreshen
+    const refreshed = await tryRefresh();
+    if (refreshed) {
+      return request<T>(path, options); // Retry
+    }
+    authStore.logout();
+    window.location.href = "/login";
+    throw new ApiError(401, "Unauthorized");
+  }
+
+  const data = res.headers.get("content-type")?.includes("application/json")
+    ? await res.json()
+    : await res.text();
+
+  if (!res.ok) {
+    throw new ApiError(res.status, (data as { error?: string })?.error ?? "Fehler", data);
+  }
+
+  return data as T;
+}
+
+async function tryRefresh(): Promise<boolean> {
+  const auth = get(authStore);
+  if (!auth.refreshToken) return false;
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: auth.refreshToken }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    authStore.setTokens(data.accessToken, data.refreshToken);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export const api = {
+  get: <T>(path: string) => request<T>(path),
+  post: <T>(path: string, body: unknown) =>
+    request<T>(path, { method: "POST", body: JSON.stringify(body) }),
+  patch: <T>(path: string, body: unknown) =>
+    request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
+  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+};

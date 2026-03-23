@@ -1,0 +1,23 @@
+{
+  "name": "@salon/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "studio": "prisma studio",
+    "seed": "tsx src/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.14.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0"
+  },
+  "exports": {
+    ".": "./generated/client/index.js"
+  }
+}
