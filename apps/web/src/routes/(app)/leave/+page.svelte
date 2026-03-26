@@ -1784,7 +1784,7 @@
   .toggle-cb {
     width: 1rem;
     height: 1rem;
-    accent-color: var(--brand);
+    accent-color: var(--color-brand);
   }
 
   /* ── Overlap ──────────────────────────────────────────────────────── */
@@ -1892,7 +1892,7 @@
     white-space: nowrap;
   }
   .pending-type {
-    color: var(--brand);
+    color: var(--color-brand);
     font-weight: 500;
   }
   .pending-dates {
@@ -2133,8 +2133,8 @@
     color: var(--color-text);
   }
   .view-tab--active {
-    color: var(--brand);
-    border-bottom-color: var(--brand);
+    color: var(--color-brand);
+    border-bottom-color: var(--color-brand);
     font-weight: 600;
   }
 
@@ -2309,7 +2309,7 @@
     background: #f4f0fa;
   }
   .cal-today {
-    box-shadow: inset 0 0 0 2px var(--brand);
+    box-shadow: inset 0 0 0 2px var(--color-brand);
   }
   .cal-holiday {
     background: #ede7f6 !important;
@@ -2337,7 +2337,7 @@
     z-index: 1;
   }
   .cal-today .cal-day-num {
-    background: var(--brand);
+    background: var(--color-brand);
     color: white;
     width: 20px;
     height: 20px;

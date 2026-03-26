@@ -1222,12 +1222,12 @@
     opacity: 0.5;
   }
   .cal-day:not(.other-month):hover {
-    background: color-mix(in srgb, var(--brand) 8%, transparent);
-    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--brand) 25%, transparent);
+    background: color-mix(in srgb, var(--color-brand) 8%, transparent);
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-brand) 25%, transparent);
   }
 
   .cal-day.is-today {
-    box-shadow: inset 0 0 0 2px var(--brand);
+    box-shadow: inset 0 0 0 2px var(--color-brand);
   }
 
   /* :global nötig – Svelte doppelt den Scope-Hash bei Compound-Selektoren */
@@ -1322,7 +1322,7 @@
     line-height: 1;
   }
   .is-today .day-num {
-    background: var(--brand);
+    background: var(--color-brand);
     color: white;
     width: 20px;
     height: 20px;
