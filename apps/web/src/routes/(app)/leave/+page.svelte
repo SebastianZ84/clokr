@@ -2,6 +2,7 @@
   import { run, preventDefault, self } from "svelte/legacy";
 
   import { onMount, onDestroy } from "svelte";
+  import { page } from "$app/stores";
   import { api } from "$api/client";
   import { authStore } from "$stores/auth";
 
@@ -123,6 +124,9 @@
   let attestTo = $state("");
   let attestSaving = $state(false);
   let attestError = $state("");
+
+  // Highlighted request (from notification deep-link)
+  let highlightRequestId: string | null = $state(null);
 
   // Drag-to-select date range in calendar
   let dragStart: string | null = $state(null);
@@ -315,10 +319,27 @@
   }
 
   // ── Laden ─────────────────────────────────────────────────────────────────
-  onMount(() => {
-    loadData();
+  onMount(async () => {
+    await loadData();
     loadCalendar();
     loadVacationSummary();
+
+    // Deep-link: highlight a specific request from notification
+    const requestId = $page.url.searchParams.get("request");
+    if (requestId) {
+      highlightRequestId = requestId;
+      // Switch to list view so the request is visible
+      view = "list";
+      // Scroll to highlighted request after DOM update
+      requestAnimationFrame(() => {
+        const el = document.getElementById(`request-${requestId}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      // Clear highlight after 3 seconds
+      setTimeout(() => {
+        highlightRequestId = null;
+      }, 3000);
+    }
   });
 
   onDestroy(() => {
@@ -760,7 +781,22 @@
   <title>Abwesenheiten – Clokr</title>
 </svelte:head>
 
-<svelte:window onmouseup={handleDayMouseUp} />
+<svelte:window
+  onmouseup={handleDayMouseUp}
+  onkeydown={(e) => {
+    if (e.key === "Escape") {
+      if (showForm) resetForm();
+      if (reviewModal) {
+        reviewModal = null;
+        reviewError = "";
+      }
+      if (attestModal) {
+        attestModal = null;
+        attestError = "";
+      }
+    }
+  }}
+/>
 
 <!-- ── Header ─────────────────────────────────────────────────────────────── -->
 <div class="page-header-row page-header">
@@ -797,12 +833,30 @@
   </button>
 </div>
 
-<!-- ── Neuer Antrag ────────────────────────────────────────────────────────── -->
+<!-- ── Neuer Antrag (Modal) ─────────────────────────────────────────────────── -->
 {#if showForm}
-  <div class="card card-body form-card">
-    <div class="form-card-header">
+  <div class="form-backdrop" onclick={resetForm} role="presentation"></div>
+  <div
+    class="form-dialog"
+    role="dialog"
+    aria-label={editingRequest ? "Antrag bearbeiten" : "Neuer Abwesenheitsantrag"}
+  >
+    <div class="form-dialog-header">
       <h2>{editingRequest ? "Antrag bearbeiten" : "Neuer Abwesenheitsantrag"}</h2>
-      <button class="btn-icon" onclick={resetForm} aria-label="Schließen">✕</button>
+      <button class="btn-icon" onclick={resetForm} aria-label="Schließen">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></svg
+        >
+      </button>
     </div>
 
     {#if formError}
@@ -1023,7 +1077,7 @@
   </div>
 {/if}
 
-<!-- ── Kalender-Ansicht ───────────────────────────────────────────────────── -->
+<!-- ── Kalender-Ansicht ──────────────────────────────────────────────────── -->
 {#if view === "calendar"}
   <!-- Urlaubsübersicht -->
   {#if showVacSummary}
@@ -1222,7 +1276,11 @@
 
     <div class="pending-list">
       {#each pendingRequests as req}
-        <div class="pending-card card">
+        <div
+          class="pending-card card"
+          id="request-{req.id}"
+          class:highlight-row={highlightRequestId === req.id}
+        >
           <div class="pending-info">
             <span class="pending-name">{req.employee.firstName} {req.employee.lastName}</span>
             {#if req.status === "CANCELLATION_REQUESTED"}
@@ -1305,7 +1363,7 @@
         <tbody>
           {#each filteredMyRequests as req}
             {@const isOwn = req.employeeId === $authStore.user?.employeeId}
-            <tr>
+            <tr id="request-{req.id}" class:highlight-row={highlightRequestId === req.id}>
               {#if isManager}
                 <td class="font-medium">{req.employee.firstName} {req.employee.lastName}</td>
               {/if}
@@ -1587,6 +1645,19 @@
 {/if}
 
 <style>
+  /* ── Highlight from notification deep-link ────────────────────────── */
+  @keyframes highlight-fade {
+    0% {
+      background-color: var(--color-brand-tint-hover);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  .highlight-row {
+    animation: highlight-fade 3s var(--ease-out) both;
+  }
+
   /* ── Layout ───────────────────────────────────────────────────────── */
   .page-header-row {
     display: flex;
@@ -1611,19 +1682,79 @@
   }
 
   /* ── Form Card ────────────────────────────────────────────────────── */
-  .form-card {
-    margin-bottom: 2rem;
+  /* ── Form Modal ─────────────────────────────────────────────────── */
+  .form-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 500;
+    animation: backdrop-in 0.15s ease;
   }
-  .form-card-header {
+  @keyframes backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .form-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92vw;
+    max-width: 640px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--glass-bg-strong, var(--color-surface));
+    backdrop-filter: blur(var(--glass-blur, 16px));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 501;
+    padding: 1.75rem;
+    animation: dialog-in 0.2s var(--ease-out);
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -48%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .form-dialog-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.25rem;
   }
-  .form-card-header h2 {
-    font-size: 1.0625rem;
+  .form-dialog-header h2 {
+    font-size: 1.125rem;
     font-weight: 600;
     margin: 0;
+  }
+  .form-dialog-header .btn-icon {
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
+  }
+  .form-dialog-header .btn-icon:hover {
+    background-color: var(--color-bg-subtle);
+    color: var(--color-text);
   }
 
   .form-grid {
@@ -2162,6 +2293,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    overflow: hidden;
+    position: relative;
   }
   .cal-cell:nth-child(7n) {
     border-right: none;
@@ -2200,6 +2333,8 @@
     font-weight: 600;
     color: var(--color-text-muted);
     line-height: 1;
+    flex-shrink: 0;
+    z-index: 1;
   }
   .cal-today .cal-day-num {
     background: var(--brand);
@@ -2227,6 +2362,9 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
   .cal-chip {
     display: flex;

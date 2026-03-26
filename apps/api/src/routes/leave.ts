@@ -232,7 +232,7 @@ export async function leaveRoutes(app: FastifyInstance) {
           type: "LEAVE_REQUEST",
           title: "Neuer Urlaubsantrag",
           message: `${request.employee.firstName} ${request.employee.lastName} hat einen ${typeDef.name}-Antrag gestellt (${body.startDate} – ${body.endDate})`,
-          link: "/leave",
+          link: `/leave?request=${request.id}`,
         });
       }
 
@@ -547,7 +547,7 @@ export async function leaveRoutes(app: FastifyInstance) {
           type: body.status === "APPROVED" ? "LEAVE_APPROVED" : "LEAVE_REJECTED",
           title: body.status === "APPROVED" ? "Antrag genehmigt" : "Antrag abgelehnt",
           message: `Ihr ${existing.leaveType.name}-Antrag wurde ${body.status === "APPROVED" ? "genehmigt" : "abgelehnt"}.`,
-          link: "/leave",
+          link: `/leave?request=${existing.id}`,
         });
       }
 
