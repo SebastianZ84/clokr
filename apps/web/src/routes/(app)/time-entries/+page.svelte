@@ -687,6 +687,24 @@
   </div>
 </div>
 
+<!-- ── View Tabs ──────────────────────────────────────────────────────── -->
+<div class="view-tabs">
+  <button
+    class="view-tab"
+    class:view-tab--active={teView === "calendar"}
+    onclick={() => (teView = "calendar")}
+  >
+    Kalender
+  </button>
+  <button
+    class="view-tab"
+    class:view-tab--active={teView === "list"}
+    onclick={() => (teView = "list")}
+  >
+    Liste
+  </button>
+</div>
+
 {#if error}
   <div class="alert alert-error" role="alert"><span>⚠</span><span>{error}</span></div>
 {/if}
@@ -725,24 +743,6 @@
     {/if}
   </div>
 {/if}
-
-<!-- ── View Tabs ──────────────────────────────────────────────────────── -->
-<div class="view-tabs">
-  <button
-    class="view-tab"
-    class:view-tab--active={teView === "calendar"}
-    onclick={() => (teView = "calendar")}
-  >
-    Kalender
-  </button>
-  <button
-    class="view-tab"
-    class:view-tab--active={teView === "list"}
-    onclick={() => (teView = "list")}
-  >
-    Liste
-  </button>
-</div>
 
 <!-- ── Kalender ─────────────────────────────────────────────────────────── -->
 {#if teView === "calendar"}
@@ -1261,33 +1261,7 @@
   }
 
   /* ── View Tabs ───────────────────────────────────────── */
-  .view-tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 0.75rem;
-    border-bottom: 1.5px solid var(--color-border-subtle);
-  }
-  .view-tab {
-    padding: 0.5rem 1rem;
-    border: none;
-    background: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition:
-      color 0.15s,
-      border-color 0.15s;
-    margin-bottom: -1.5px;
-  }
-  .view-tab:hover {
-    color: var(--color-text);
-  }
-  .view-tab--active {
-    color: var(--color-brand);
-    border-bottom-color: var(--color-brand);
-  }
+  /* view-tabs, view-tab → global in app.css */
 
   /* ── List view actions always visible ────────────────── */
   .row-actions--visible {

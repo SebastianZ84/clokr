@@ -1171,36 +1171,30 @@
           stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg
         >
       </button>
-      {#if isManager}
-        <button
-          class="team-toggle"
-          class:team-toggle--active={showTeamAbsences}
-          onclick={() => {
-            showTeamAbsences = !showTeamAbsences;
-          }}
-          title={showTeamAbsences
-            ? "Team-Abwesenheiten ausblenden"
-            : "Team-Abwesenheiten einblenden"}
+      <button
+        class="team-toggle"
+        class:team-toggle--active={showTeamAbsences}
+        onclick={() => {
+          showTeamAbsences = !showTeamAbsences;
+        }}
+        title={showTeamAbsences ? "Team-Abwesenheiten ausblenden" : "Team-Abwesenheiten einblenden"}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path
+            d="M22 21v-2a4 4 0 0 0-3-3.87"
+          /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
-              cx="9"
-              cy="7"
-              r="4"
-            /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
-          >
-          Team
-        </button>
-      {/if}
+        Team
+      </button>
     </div>
 
     <!-- Wochentag-Header -->
@@ -2173,50 +2167,7 @@
   }
 
   /* ── View Tabs ────────────────────────────────────────────────────── */
-  .view-tabs {
-    display: flex;
-    gap: 0.25rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--gray-200);
-  }
-  .view-tab {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.625rem 1.25rem;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    border-radius: 4px 4px 0 0;
-    transition:
-      color 0.15s,
-      border-color 0.15s;
-  }
-  .view-tab:hover {
-    color: var(--color-text);
-  }
-  .view-tab--active {
-    color: var(--color-brand);
-    border-bottom-color: var(--color-brand);
-    font-weight: 600;
-  }
-  .tab-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 1.125rem;
-    height: 1.125rem;
-    padding: 0 0.3rem;
-    border-radius: 9999px;
-    background: var(--color-red);
-    color: #fff;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    margin-left: 0.375rem;
-    line-height: 1;
-  }
+  /* view-tabs, view-tab, tab-badge → global in app.css */
 
   /* ── Urlaubsübersicht ─────────────────────────────────────────────── */
   .vac-summary {
