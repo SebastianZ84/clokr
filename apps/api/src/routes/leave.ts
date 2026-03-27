@@ -639,7 +639,15 @@ export async function leaveRoutes(app: FastifyInstance) {
       }
 
       if (existing.status === "APPROVED") {
-        // Genehmigter Antrag → Stornierungsantrag stellen (wartet auf Manager-Freigabe)
+        // Manager/Admin can cancel their own approved requests directly
+        if (isManager && isOwner) {
+          await app.prisma.leaveRequest.update({
+            where: { id },
+            data: { status: "CANCELLED", reviewedBy: req.user.sub, reviewedAt: new Date() },
+          });
+          return reply.code(204).send();
+        }
+        // Regular employee → request cancellation (needs manager approval)
         await app.prisma.leaveRequest.update({
           where: { id },
           data: { status: "CANCELLATION_REQUESTED" },
