@@ -816,10 +816,8 @@
 />
 
 <!-- ── Header ─────────────────────────────────────────────────────────────── -->
-<div class="page-header-row page-header">
-  <div>
-    <h1>Abwesenheiten</h1>
-  </div>
+<div class="page-header-compact">
+  <h1>Abwesenheiten</h1>
   {#if !showForm}
     <button
       class="btn btn-primary"
@@ -1712,18 +1710,7 @@
     animation: highlight-fade 3s var(--ease-out) both;
   }
 
-  /* ── Layout ───────────────────────────────────────────────────────── */
-  .page-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-  }
-  .page-header-row h1 {
-    font-size: 1.375rem;
-    margin: 0;
-  }
+  /* page-header-compact → global in app.css */
 
   .section-header {
     display: flex;

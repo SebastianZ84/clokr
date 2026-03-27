@@ -642,6 +642,23 @@ select.form-input {
   color: var(--color-text-muted);
 }
 
+/* Compact page header variant for pages with tabs below */
+.page-header-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.page-header-compact h1 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
 .page-header-row {
   display: flex;
   align-items: flex-start;

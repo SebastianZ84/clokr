@@ -629,9 +629,10 @@
       );
     }, 0),
   );
+  // Expected hours up to yesterday (today is still in progress)
   let totalExpected = $derived(
     calendarDays
-      .filter((d) => d.isCurrentMonth && !d.isFuture)
+      .filter((d) => d.isCurrentMonth && !d.isFuture && !d.isToday)
       .reduce((s, d) => s + d.expectedMin, 0),
   );
   let dayWarnings = $derived(arbzgEnabled ? checkArbZGFrontend(selectedSlots) : []);
@@ -676,15 +677,11 @@
   }}
 />
 
-<div class="page-header">
-  <div class="header-row">
-    <div>
-      <h1>Zeiteinträge</h1>
-    </div>
-    <button class="btn btn-primary" onclick={() => openAdd()}>
-      <span aria-hidden="true">＋</span> Slot hinzufügen
-    </button>
-  </div>
+<div class="page-header-compact">
+  <h1>Zeiteinträge</h1>
+  <button class="btn btn-primary" onclick={() => openAdd()}>
+    <span aria-hidden="true">＋</span> Slot hinzufügen
+  </button>
 </div>
 
 <!-- ── View Tabs ──────────────────────────────────────────────────────── -->
@@ -1044,18 +1041,7 @@
 {/if}
 
 <style>
-  .header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.75rem;
-  }
-  .header-row h1 {
-    font-size: 1.375rem;
-    margin: 0;
-  }
+  /* page-header-compact → global in app.css */
 
   /* ── Kalender ─────────────────────────────────────────────────────── */
   .cal-section {

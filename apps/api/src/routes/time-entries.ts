@@ -995,13 +995,18 @@ export async function updateOvertimeAccount(app: FastifyInstance, employeeId: st
     return sum + (e.endTime.getTime() - e.startTime.getTime()) / 60000 - Number(e.breakMinutes);
   }, 0);
 
-  // Soll-Minuten (TZ-aware Wochentag-Zuordnung), nur bis heute, Tage vor hireDate überspringen
+  // Soll-Minuten (TZ-aware Wochentag-Zuordnung), nur bis gestern (today is incomplete)
   const effectiveStart =
     employee?.hireDate && employee.hireDate > monthStart ? employee.hireDate : monthStart;
   const todayStr = dateStrInTz(now, tz);
   const todayDate = new Date(todayStr + "T00:00:00Z");
-  const effectiveEnd = todayDate < monthEnd ? todayDate : monthEnd;
-  const expectedMinutes = calcExpectedMinutesTz(schedule, effectiveStart, effectiveEnd, tz);
+  const yesterdayDate = new Date(todayDate.getTime() - 86400000);
+  const effectiveEnd =
+    yesterdayDate < monthStart ? monthStart : yesterdayDate < monthEnd ? yesterdayDate : monthEnd;
+  const expectedMinutes =
+    effectiveEnd < effectiveStart
+      ? 0
+      : calcExpectedMinutesTz(schedule, effectiveStart, effectiveEnd, tz);
 
   // Öffentliche Feiertage abziehen
   const holidays = await app.prisma.publicHoliday.findMany({
