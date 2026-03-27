@@ -155,7 +155,11 @@ async function hasApprovedLeaveOnDate(
       type: { in: ["MATERNITY", "PARENTAL"] },
     },
   });
-  if (absence) return absence.type === "MATERNITY" ? "Mutterschutz" : "Elternzeit";
+  if (absence)
+    return {
+      type: absence.type === "MATERNITY" ? "Mutterschutz" : "Elternzeit",
+      status: "APPROVED" as const,
+    };
 
   return null;
 }
