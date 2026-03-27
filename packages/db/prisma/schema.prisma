@@ -82,6 +82,11 @@ model TenantConfig {
   // Pausen-Slots
   autoBreakEnabled       Boolean @default(false)
   defaultBreakStart      String? @db.VarChar(5)  // e.g. "12:00"
+  // Überstunden-Jahresübertrag
+  overtimeCarryOverMode  String  @default("FULL") // FULL | CAPPED | RESET
+  overtimeCarryOverCap   Int?    // Max. Übertrag in Minuten (nur bei CAPPED)
+  // Aufbewahrungsfrist in Jahren (Minimum 2, Default 10)
+  dataRetentionYears     Int     @default(10)
   createdAt            DateTime @default(now()) @db.Timestamptz
   updatedAt            DateTime @updatedAt      @db.Timestamptz
 

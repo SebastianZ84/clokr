@@ -315,4 +315,131 @@ export async function overtimeRoutes(app: FastifyInstance) {
       return snapshots;
     },
   });
+
+  // ── Jahresübertrag ───────────────────────────────────────────────────────────
+
+  const closeYearSchema = z.object({
+    employeeId: z.string().uuid(),
+    year: z.number().int().min(2020).max(2099),
+  });
+
+  // POST /api/v1/overtime/close-year  – Jahresübertrag erstellen
+  app.post("/close-year", {
+    schema: { tags: ["Überstunden"], security: [{ bearerAuth: [] }] },
+    preHandler: requireRole("ADMIN"),
+    handler: async (req, reply) => {
+      const { employeeId, year } = closeYearSchema.parse(req.body);
+
+      const employee = await app.prisma.employee.findUnique({
+        where: { id: employeeId },
+        select: { tenantId: true },
+      });
+      if (!employee) return reply.code(404).send({ error: "Mitarbeiter nicht gefunden" });
+
+      const tz = await getTenantTimezone(app.prisma, employee.tenantId);
+
+      // Year range
+      const yearStart = new Date(`${year}-01-01T00:00:00Z`);
+      const yearEnd = new Date(`${year}-12-31T23:59:59Z`);
+
+      if (yearEnd > new Date()) {
+        return reply.code(400).send({ error: "Laufendes Jahr kann nicht abgeschlossen werden" });
+      }
+
+      // Check if yearly snapshot already exists
+      const existing = await app.prisma.saldoSnapshot.findFirst({
+        where: {
+          employeeId,
+          periodType: "YEARLY",
+          periodStart: { gte: new Date(`${year}-01-01`), lte: new Date(`${year}-01-02`) },
+        },
+      });
+      if (existing) {
+        return reply.code(409).send({ error: "Jahr ist bereits abgeschlossen" });
+      }
+
+      // Check all 12 months are closed
+      const monthSnapshots = await app.prisma.saldoSnapshot.findMany({
+        where: {
+          employeeId,
+          periodType: "MONTHLY",
+          periodStart: { gte: yearStart, lte: yearEnd },
+        },
+        orderBy: { periodStart: "asc" },
+      });
+
+      if (monthSnapshots.length < 12) {
+        const closedMonths = monthSnapshots.map((s) => new Date(s.periodStart).getUTCMonth() + 1);
+        const missing = Array.from({ length: 12 }, (_, i) => i + 1).filter(
+          (m) => !closedMonths.includes(m),
+        );
+        return reply.code(400).send({
+          error: `Nicht alle Monate abgeschlossen. Fehlend: ${missing.join(", ")}`,
+        });
+      }
+
+      // Calculate yearly totals from monthly snapshots
+      const yearWorked = monthSnapshots.reduce((s, m) => s + m.workedMinutes, 0);
+      const yearExpected = monthSnapshots.reduce((s, m) => s + m.expectedMinutes, 0);
+      const yearBalance = monthSnapshots.reduce((s, m) => s + m.balanceMinutes, 0);
+
+      // Last month's carryOver = cumulative balance through year-end
+      const decemberSnapshot = monthSnapshots[monthSnapshots.length - 1];
+      const finalCarryOver = decemberSnapshot.carryOver;
+
+      // Apply carry-over rules from tenant config
+      const tenantConfig = await app.prisma.tenantConfig.findUnique({
+        where: { tenantId: employee.tenantId },
+      });
+      const mode = tenantConfig?.overtimeCarryOverMode ?? "FULL";
+      const cap = tenantConfig?.overtimeCarryOverCap;
+
+      let appliedCarryOver = finalCarryOver;
+      if (mode === "RESET") {
+        appliedCarryOver = 0;
+      } else if (mode === "CAPPED" && cap != null && finalCarryOver > cap) {
+        appliedCarryOver = cap;
+      }
+      // FULL: keep everything
+
+      const snapshot = await app.prisma.saldoSnapshot.create({
+        data: {
+          employeeId,
+          periodType: "YEARLY",
+          periodStart: yearStart,
+          periodEnd: yearEnd,
+          workedMinutes: yearWorked,
+          expectedMinutes: yearExpected,
+          balanceMinutes: yearBalance,
+          carryOver: appliedCarryOver,
+          closedAt: new Date(),
+          closedBy: req.user.sub,
+          note:
+            mode === "RESET"
+              ? "Jahresübertrag: Reset auf 0"
+              : mode === "CAPPED" && cap != null && finalCarryOver > cap
+                ? `Jahresübertrag: gedeckelt auf ${Math.round(cap / 60)}h (${Math.round(finalCarryOver / 60)}h verfallen)`
+                : `Jahresübertrag: ${Math.round(appliedCarryOver / 60)}h`,
+        },
+      });
+
+      // Update overtime account with the applied carry-over
+      await app.prisma.overtimeAccount.upsert({
+        where: { employeeId },
+        create: { employeeId, balanceHours: appliedCarryOver / 60 },
+        update: { balanceHours: appliedCarryOver / 60 },
+      });
+
+      await app.audit({
+        userId: req.user.sub,
+        action: "CREATE",
+        entity: "SaldoSnapshot",
+        entityId: snapshot.id,
+        newValue: { ...snapshot, mode, originalCarryOver: finalCarryOver },
+        request: { ip: req.ip, headers: req.headers as Record<string, string> },
+      });
+
+      return reply.code(201).send(snapshot);
+    },
+  });
 }
