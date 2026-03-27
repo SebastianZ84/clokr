@@ -189,6 +189,14 @@
   type View = "calendar" | "list" | "approvals";
   let view: View = $state("calendar");
 
+  /** Format a local Date to YYYY-MM-DD without UTC shift */
+  function toLocalDateStr(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
   const now = new Date();
   let calYear = $state(now.getFullYear());
   let calMonth = $state(now.getMonth() + 1); // 1-12
@@ -199,10 +207,10 @@
   function buildCalMap(entries: CalEntry[]): Map<string, CalEntry[]> {
     const map = new Map<string, CalEntry[]>();
     for (const e of entries) {
-      const cur = new Date(e.startDate);
-      const end = new Date(e.endDate);
+      const cur = new Date(e.startDate + "T00:00:00");
+      const end = new Date(e.endDate + "T00:00:00");
       while (cur <= end) {
-        const k = cur.toISOString().split("T")[0];
+        const k = toLocalDateStr(cur);
         if (!map.has(k)) map.set(k, []);
         map.get(k)!.push(e);
         cur.setDate(cur.getDate() + 1);
@@ -227,7 +235,7 @@
     let startDow = first.getDay(); // 0=So
     startDow = startDow === 0 ? 6 : startDow - 1;
 
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = toLocalDateStr(new Date());
 
     // Vortage aus Vormonat
     for (let i = startDow - 1; i >= 0; i--) {
@@ -248,7 +256,7 @@
   }
 
   function mkCalDay(d: Date, isCurrentMonth: boolean, todayStr: string): CalDay {
-    const dateStr = d.toISOString().split("T")[0];
+    const dateStr = toLocalDateStr(d);
     const dow = d.getDay();
     return {
       date: d,
@@ -679,8 +687,8 @@
     if (!start || !end || start > end) return 0;
     if (halfDay) return 0.5;
     let days = 0;
-    const cur = new Date(start);
-    const endD = new Date(end);
+    const cur = new Date(start + "T00:00:00");
+    const endD = new Date(end + "T00:00:00");
     while (cur <= endD) {
       const dow = cur.getDay();
       if (dow !== 0 && dow !== 6) days++;
