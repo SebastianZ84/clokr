@@ -28,6 +28,19 @@
 - Code, comments, commit messages, docs: **English**
 - API descriptions (Swagger): English
 
+## Audit-Proof / Revisionssicherheit
+
+Clokr MUST be audit-proof (revisionssicher). All data relevant to working time, leave, and payroll must be tamper-proof and traceable:
+
+- **No hard deletes** of time entries, leave requests, or employee records — use soft delete (`deletedAt`) or status changes instead
+- **Audit trail**: Every create, update, and delete must be logged with userId, timestamp, IP, and before/after values
+- **Immutability after lock**: Once a month is closed (`isLocked`), entries MUST NOT be editable or deletable — not even by admins
+- **Data retention**: Records must be retained for the legally required period (currently 2 years for time records per § 16 ArbZG, 6/10 years for payroll-relevant data per AO/HGB)
+- **No silent overwrites**: Any correction to a locked/finalized entry must create a new correction entry with reference to the original, not modify it in place
+- **Traceability**: It must always be possible to reconstruct who changed what, when, and why
+
+These rules apply to ALL code changes touching time entries, leave, overtime, and employee data. When in doubt, prefer creating an audit log entry over skipping it.
+
 ## ArbZG (Arbeitszeitgesetz) Rules
 
 These rules MUST be followed when implementing or modifying ArbZG compliance checks:
