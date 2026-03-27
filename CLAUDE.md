@@ -40,9 +40,30 @@ These rules MUST be followed when implementing or modifying ArbZG compliance che
 - **§ 3 Weekly max: 48h** — hard weekly cap (Mo-Sa = 6 Werktage)
 - **§ 4 Breaks**: >6h work = min 30min break; >9h work = min 45min break
 - **§ 5 Rest period**: min 11h between end of work and start of next day
-- **§ 8 BUrlG**: No work during approved vacation — time entry creation
-  (manual, clock-in, NFC) is BLOCKED when approved leave exists on that day.
-  Employee must cancel the leave first before tracking time.
+- **§ 8 BUrlG**: Leave and time tracking interaction rules:
+  - **APPROVED leave**: Time entry creation is BLOCKED. Employee must request cancellation first.
+  - **CANCELLATION_REQUESTED leave**: Time entries ARE allowed but created as `isInvalid: true`
+    with reason "Urlaubsstornierung ausstehend". These entries don't count in saldo.
+  - **When cancellation is approved** (→ CANCELLED): Invalid entries are automatically revalidated.
+  - **When cancellation is rejected**: Entries stay invalid (manager can manually handle).
+  - Cancellation always requires approval by a DIFFERENT manager (self-approval blocked).
+  - Leave remains active (shown in calendar, counts for saldo) until cancellation is approved.
+
+## Leave Cancellation Flow
+
+1. Employee/Manager requests cancellation → status = `CANCELLATION_REQUESTED`
+2. Leave remains active: shown in calendar (special styling), blocks regular time tracking
+3. Time entries during this period: allowed but marked `isInvalid` (needs cancellation approval first)
+4. Another manager approves cancellation → status = `CANCELLED`, time entries auto-revalidated
+5. If cancellation rejected → status reverts to `APPROVED`, time entries stay invalid
+
+## Overtime Saldo Calculation
+
+- **Saldo = Worked hours − Expected hours** (both calculated for the same date range)
+- **Date range**: From hire date (or month start) up to today (if entries exist) or yesterday
+- Leave, holidays, and absences within this range reduce expected hours
+- Leave/holidays are clamped to the effective range (no over-deduction from pre-hire leave)
+- Saldo recalculates on every GET /overtime/:employeeId request
 
 ## Schedule Types
 

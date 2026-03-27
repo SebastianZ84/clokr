@@ -130,22 +130,22 @@ async function checkOverlap(
   return `Überschneidung mit bestehendem Eintrag (${fmt(overlapping.startTime)} – ${fmt(overlapping.endTime)})`;
 }
 
-/** § 8 BUrlG: Prüft ob genehmigter Urlaub oder Abwesenheit an dem Tag vorliegt */
+/** § 8 BUrlG: Prüft ob aktiver Urlaub an dem Tag vorliegt */
 async function hasApprovedLeaveOnDate(
   prisma: any,
   employeeId: string,
   dateStr: string,
-): Promise<string | null> {
+): Promise<{ type: string; status: "APPROVED" | "CANCELLATION_REQUESTED" } | null> {
   const leave = await prisma.leaveRequest.findFirst({
     where: {
       employeeId,
-      status: "APPROVED",
+      status: { in: ["APPROVED", "CANCELLATION_REQUESTED"] },
       startDate: { lte: new Date(dateStr + "T23:59:59Z") },
       endDate: { gte: new Date(dateStr + "T00:00:00Z") },
     },
     include: { leaveType: { select: { name: true } } },
   });
-  if (leave) return leave.leaveType.name;
+  if (leave) return { type: leave.leaveType.name, status: leave.status };
 
   const absence = await prisma.absence.findFirst({
     where: {
@@ -292,19 +292,21 @@ export async function timeEntryRoutes(app: FastifyInstance) {
           };
         }
 
-        // § 8 BUrlG: Keine Arbeit während genehmigtem Urlaub
-        const leaveReason = await hasApprovedLeaveOnDate(tx, employee.id, todayStr);
-        if (leaveReason) {
-          return { action: "BLOCKED" as const, leaveReason };
+        // § 8 BUrlG: Check for active leave on this day
+        const leaveCheck = await hasApprovedLeaveOnDate(tx, employee.id, todayStr);
+        if (leaveCheck?.status === "APPROVED") {
+          return { action: "BLOCKED" as const, leaveReason: leaveCheck.type };
         }
 
-        // Einstempeln
+        // Einstempeln — if CANCELLATION_REQUESTED, mark as invalid until cancellation approved
         const entry = await tx.timeEntry.create({
           data: {
             employeeId: employee.id,
             date: today,
             startTime: now,
             source: "NFC",
+            isInvalid: leaveCheck?.status === "CANCELLATION_REQUESTED",
+            invalidReason: leaveCheck ? "Urlaubsstornierung ausstehend" : null,
           },
         });
 
@@ -414,15 +416,17 @@ export async function timeEntryRoutes(app: FastifyInstance) {
         return reply.code(403).send({ error: "Mitarbeiter ist deaktiviert" });
       }
 
-      // § 8 BUrlG: Keine Arbeit während genehmigtem Urlaub
+      // § 8 BUrlG: Check for active leave
+      let clockLeaveCheck: { type: string; status: "APPROVED" | "CANCELLATION_REQUESTED" } | null =
+        null;
       const empTenantId = employeeRecord?.tenantId;
       if (empTenantId) {
         const clockTz = await getTenantTimezone(app.prisma, empTenantId);
         const clockTodayStr = dateStrInTz(new Date(), clockTz);
-        const clockLeave = await hasApprovedLeaveOnDate(app.prisma, employeeId, clockTodayStr);
-        if (clockLeave) {
+        clockLeaveCheck = await hasApprovedLeaveOnDate(app.prisma, employeeId, clockTodayStr);
+        if (clockLeaveCheck?.status === "APPROVED") {
           return reply.code(409).send({
-            error: `§ 8 BUrlG: Heute ist ${clockLeave} genehmigt. Bitte zuerst stornieren.`,
+            error: `§ 8 BUrlG: Heute ist ${clockLeaveCheck.type} genehmigt. Bitte zuerst stornieren.`,
           });
         }
       }
@@ -446,6 +450,8 @@ export async function timeEntryRoutes(app: FastifyInstance) {
             startTime: now,
             source: body.source,
             note: body.note,
+            isInvalid: clockLeaveCheck?.status === "CANCELLATION_REQUESTED",
+            invalidReason: clockLeaveCheck ? "Urlaubsstornierung ausstehend" : null,
           },
         });
         return { conflict: false as const, entry };
@@ -607,12 +613,12 @@ export async function timeEntryRoutes(app: FastifyInstance) {
         }
       }
 
-      // § 8 BUrlG: Keine Arbeit während genehmigtem Urlaub
+      // § 8 BUrlG: Check for active leave
       const manualEmployeeId = body.employeeId ?? req.user.employeeId ?? "";
       const manualLeave = await hasApprovedLeaveOnDate(app.prisma, manualEmployeeId, entryDateStr);
-      if (manualLeave) {
+      if (manualLeave?.status === "APPROVED") {
         return reply.code(409).send({
-          error: `§ 8 BUrlG: An diesem Tag ist ${manualLeave} genehmigt. Bitte zuerst stornieren.`,
+          error: `§ 8 BUrlG: An diesem Tag ist ${manualLeave.type} genehmigt. Bitte zuerst stornieren.`,
         });
       }
 
@@ -648,6 +654,8 @@ export async function timeEntryRoutes(app: FastifyInstance) {
           note: body.note,
           source: "MANUAL",
           createdBy: user.sub,
+          isInvalid: manualLeave?.status === "CANCELLATION_REQUESTED",
+          invalidReason: manualLeave ? "Urlaubsstornierung ausstehend" : null,
         },
       });
 

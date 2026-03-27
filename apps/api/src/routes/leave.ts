@@ -387,6 +387,17 @@ export async function leaveRoutes(app: FastifyInstance) {
             },
           });
 
+          // Revalidate time entries that were created during CANCELLATION_REQUESTED
+          await app.prisma.timeEntry.updateMany({
+            where: {
+              employeeId: existing.employeeId,
+              date: { gte: existing.startDate, lte: existing.endDate },
+              isInvalid: true,
+              invalidReason: "Urlaubsstornierung ausstehend",
+            },
+            data: { isInvalid: false, invalidReason: null },
+          });
+
           const typeCode = TYPE_CODES.find(
             (c) => LEAVE_TYPE_DEFS[c].name === existing.leaveType.name,
           );
@@ -639,15 +650,8 @@ export async function leaveRoutes(app: FastifyInstance) {
       }
 
       if (existing.status === "APPROVED") {
-        // Manager/Admin can cancel their own approved requests directly
-        if (isManager && isOwner) {
-          await app.prisma.leaveRequest.update({
-            where: { id },
-            data: { status: "CANCELLED", reviewedBy: req.user.sub, reviewedAt: new Date() },
-          });
-          return reply.code(204).send();
-        }
-        // Regular employee → request cancellation (needs manager approval)
+        // Approved leave → request cancellation (needs another manager's approval)
+        // Until approved, the leave remains active (blocks time tracking, shown in calendar)
         await app.prisma.leaveRequest.update({
           where: { id },
           data: { status: "CANCELLATION_REQUESTED" },
