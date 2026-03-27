@@ -1181,8 +1181,8 @@
   }
 
   .cal-day {
-    min-height: 110px;
-    padding: 0.5rem 0.625rem;
+    min-height: 72px;
+    padding: 0.3rem 0.4rem;
     border-right: 1px solid var(--gray-100, #f3f4f6);
     border-bottom: 1px solid var(--gray-100, #f3f4f6);
     display: flex;
@@ -1316,30 +1316,31 @@
   }
 
   .day-num {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--color-text-muted);
     line-height: 1;
+    flex-shrink: 0;
   }
   .is-today .day-num {
     background: var(--color-brand);
     color: white;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   .day-worked {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 700;
     font-family: var(--font-mono);
     color: var(--color-text);
   }
   .day-bal {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-family: var(--font-mono);
     font-weight: 600;
   }

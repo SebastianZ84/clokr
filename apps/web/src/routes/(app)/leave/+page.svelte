@@ -186,7 +186,7 @@
     isHoliday: boolean;
   }
 
-  type View = "calendar" | "list";
+  type View = "calendar" | "list" | "approvals";
   let view: View = $state("calendar");
 
   const now = new Date();
@@ -324,12 +324,18 @@
     loadCalendar();
     loadVacationSummary();
 
+    // Deep-link: view param from dashboard
+    const viewParam = $page.url.searchParams.get("view");
+    if (viewParam === "approvals" && isManager) {
+      view = "approvals";
+    }
+
     // Deep-link: highlight a specific request from notification
     const requestId = $page.url.searchParams.get("request");
     if (requestId) {
       highlightRequestId = requestId;
-      // Switch to list view so the request is visible
-      view = "list";
+      // Switch to approvals tab if manager, otherwise list
+      view = isManager ? "approvals" : "list";
       // Scroll to highlighted request after DOM update
       requestAnimationFrame(() => {
         const el = document.getElementById(`request-${requestId}`);
@@ -359,8 +365,8 @@
           : Promise.resolve([] as LeaveRequest[]),
       ]);
       myRequests = mine;
-      // Manager-Liste: offene Anträge die ggf. auch eigene sind (dedupliziert)
-      pendingRequests = all.filter((r) => !mine.find((m) => m.id === r.id));
+      // Manager: all pending requests (including own — shown in separate tab)
+      pendingRequests = all;
     } catch (e: unknown) {
       error = e instanceof Error ? e.message : "Fehler beim Laden";
     } finally {
@@ -802,7 +808,6 @@
 <div class="page-header-row page-header">
   <div>
     <h1>Abwesenheiten</h1>
-    <p>Urlaub, Überstundenausgleich und weitere Abwesenheiten verwalten</p>
   </div>
   {#if !showForm}
     <button
@@ -826,11 +831,23 @@
     class:view-tab--active={view === "calendar"}
     onclick={() => (view = "calendar")}
   >
-    📅 Kalender
+    Kalender
   </button>
   <button class="view-tab" class:view-tab--active={view === "list"} onclick={() => (view = "list")}>
-    📋 Liste
+    Meine Anträge
   </button>
+  {#if isManager}
+    <button
+      class="view-tab"
+      class:view-tab--active={view === "approvals"}
+      onclick={() => (view = "approvals")}
+    >
+      Genehmigungen
+      {#if pendingRequests.length > 0}
+        <span class="tab-badge">{pendingRequests.length}</span>
+      {/if}
+    </button>
+  {/if}
 </div>
 
 <!-- ── Neuer Antrag (Modal) ─────────────────────────────────────────────────── -->
@@ -1267,47 +1284,8 @@
 
 <!-- ── Listen-Ansicht ────────────────────────────────────────────────────── -->
 {#if view === "list"}
-  <!-- ── Manager: Offene Anträge ─────────────────────────────────────────────── -->
-  {#if isManager && !loading && pendingRequests.length > 0}
-    <div class="section-header">
-      <h2>Offene Anträge</h2>
-      <span class="badge badge-yellow">{pendingRequests.length}</span>
-    </div>
-
-    <div class="pending-list">
-      {#each pendingRequests as req}
-        <div
-          class="pending-card card"
-          id="request-{req.id}"
-          class:highlight-row={highlightRequestId === req.id}
-        >
-          <div class="pending-info">
-            <span class="pending-name">{req.employee.firstName} {req.employee.lastName}</span>
-            {#if req.status === "CANCELLATION_REQUESTED"}
-              <span class="badge badge-orange" style="font-size:0.75rem">Stornierung beantragt</span
-              >
-            {:else}
-              <span class="pending-type">{typeName(req.typeCode)}</span>
-            {/if}
-            <span class="pending-dates">{fmtDate(req.startDate)} – {fmtDate(req.endDate)}</span>
-            <span class="pending-days text-muted">{daysLabel(Number(req.days), req.halfDay)}</span>
-            {#if req.note}
-              <span class="pending-note text-muted">„{req.note}"</span>
-            {/if}
-          </div>
-          <button class="btn btn-sm btn-ghost" onclick={() => openReview(req)}>
-            {req.status === "CANCELLATION_REQUESTED" ? "Stornierung prüfen →" : "Prüfen →"}
-          </button>
-        </div>
-      {/each}
-    </div>
-  {/if}
-
   <!-- ── Anträge-Tabelle ─────────────────────────────────────────────────────── -->
-  <div
-    class="section-header"
-    style="margin-top:{isManager && pendingRequests.length > 0 ? '1rem' : '0'}"
-  >
+  <div class="section-header">
     <h2>{isManager ? "Alle Anträge" : "Meine Anträge"}</h2>
   </div>
 
@@ -1423,6 +1401,45 @@
     </div>
   {/if}
 {/if}<!-- Ende Liste -->
+
+<!-- ── Genehmigungen (Manager) ─────────────────────────────────────────────── -->
+{#if view === "approvals"}
+  {#if !loading && pendingRequests.length > 0}
+    <div class="pending-list">
+      {#each pendingRequests as req}
+        <div
+          class="pending-card card"
+          id="request-{req.id}"
+          class:highlight-row={highlightRequestId === req.id}
+        >
+          <div class="pending-info">
+            <span class="pending-name">{req.employee.firstName} {req.employee.lastName}</span>
+            {#if req.status === "CANCELLATION_REQUESTED"}
+              <span class="badge badge-orange" style="font-size:0.75rem">Stornierung beantragt</span
+              >
+            {:else}
+              <span class="pending-type">{typeName(req.typeCode)}</span>
+            {/if}
+            <span class="pending-dates">{fmtDate(req.startDate)} – {fmtDate(req.endDate)}</span>
+            <span class="pending-days text-muted">{daysLabel(Number(req.days), req.halfDay)}</span>
+            {#if req.note}
+              <span class="pending-note text-muted">„{req.note}"</span>
+            {/if}
+          </div>
+          <button class="btn btn-sm btn-ghost" onclick={() => openReview(req)}>
+            {req.status === "CANCELLATION_REQUESTED" ? "Stornierung prüfen →" : "Prüfen →"}
+          </button>
+        </div>
+      {/each}
+    </div>
+  {:else if !loading}
+    <div class="empty-state card card-body">
+      <span class="empty-icon">✅</span>
+      <h3>Keine offenen Anträge</h3>
+      <p class="text-muted">Alle Anträge wurden bearbeitet.</p>
+    </div>
+  {/if}
+{/if}
 
 <!-- ── Review-Modal ─────────────────────────────────────────────────────────── -->
 {#if reviewModal}
@@ -1662,8 +1679,13 @@
   .page-header-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .page-header-row h1 {
+    font-size: 1.375rem;
+    margin: 0;
   }
 
   .section-header {
@@ -2137,67 +2159,75 @@
     border-bottom-color: var(--color-brand);
     font-weight: 600;
   }
+  .tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding: 0 0.3rem;
+    border-radius: 9999px;
+    background: var(--color-red);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    margin-left: 0.375rem;
+    line-height: 1;
+  }
 
   /* ── Urlaubsübersicht ─────────────────────────────────────────────── */
   .vac-summary {
     display: flex;
     align-items: center;
-    gap: 0;
-    background: var(--gray-50, #f9fafb);
-    border: 1px solid var(--gray-200);
-    border-radius: 10px;
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 1.25rem;
+    gap: 1.25rem;
+    padding: 0.5rem 1rem;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.6));
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.5));
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
     flex-wrap: wrap;
-    gap: 0.25rem 0;
+    font-size: 0.8125rem;
   }
   .vac-summary-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    flex: 1;
-    min-width: 80px;
-    padding: 0.25rem 0.5rem;
-    border-right: 1px solid var(--gray-200);
+    gap: 0.375rem;
   }
   .vac-summary-item:last-child {
-    border-right: none;
+    margin-left: 0;
   }
   .vac-summary-divider {
     width: 1px;
-    height: 36px;
-    background: var(--gray-300, #d1d5db);
-    margin: 0 0.5rem;
-    align-self: center;
+    height: 1rem;
+    background: var(--color-border);
+    flex-shrink: 0;
   }
   .vac-summary-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--color-text-muted);
-    white-space: nowrap;
+    font-size: 0.8125rem;
   }
   .vac-summary-value {
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-weight: 600;
     font-family: var(--font-mono);
     color: var(--color-text);
-    margin-top: 0.125rem;
+    font-size: 0.8125rem;
   }
   .vac-summary-carry {
-    color: #2196f3;
+    color: var(--color-blue);
   }
   .vac-summary-planned {
-    color: #ff9800;
+    color: var(--color-yellow);
   }
   .vac-summary-left {
-    color: #4caf50;
+    color: var(--color-green);
+    font-weight: 700;
   }
   .vac-summary-warn {
-    color: var(--color-red, #dc2626);
+    color: var(--color-red);
+    font-weight: 700;
   }
   .vac-summary-item--highlight .vac-summary-label {
+    font-weight: 600;
     color: var(--color-text);
   }
 
@@ -2286,13 +2316,13 @@
 
   .cal-cell {
     background: #fff;
-    min-height: 108px;
-    padding: 0.5rem 0.625rem 0.625rem;
+    min-height: 72px;
+    padding: 0.3rem 0.4rem 0.4rem;
     border-right: 1px solid var(--gray-100, #f3f4f6);
     border-bottom: 1px solid var(--gray-100, #f3f4f6);
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 2px;
     overflow: hidden;
     position: relative;
   }
@@ -2369,12 +2399,12 @@
   .cal-chip {
     display: flex;
     align-items: baseline;
-    gap: 0.25rem;
-    padding: 3px 8px;
-    border-radius: 4px;
+    gap: 0.2rem;
+    padding: 1px 6px;
+    border-radius: 3px;
     color: #fff;
-    font-size: 0.8125rem;
-    line-height: 1.4;
+    font-size: 0.75rem;
+    line-height: 1.3;
     overflow: hidden;
     cursor: default;
   }

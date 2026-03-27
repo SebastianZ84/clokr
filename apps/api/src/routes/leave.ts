@@ -362,6 +362,17 @@ export async function leaveRoutes(app: FastifyInstance) {
         return reply.code(409).send({ error: "Antrag kann nicht mehr geändert werden" });
       }
 
+      // Block self-approval — managers cannot approve their own requests
+      const reviewerEmployee = await app.prisma.employee.findFirst({
+        where: { userId: req.user.sub },
+        select: { id: true },
+      });
+      if (reviewerEmployee && existing.employeeId === reviewerEmployee.id) {
+        return reply
+          .code(403)
+          .send({ error: "Eigene Anträge können nicht selbst genehmigt werden" });
+      }
+
       // ── Stornierungsantrag prüfen ────────────────────────────────────────────
       if (existing.status === "CANCELLATION_REQUESTED") {
         if (body.status === "APPROVED") {
