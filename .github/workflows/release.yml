@@ -1,8 +1,12 @@
 name: Release — Promote & Publish
 
+# Triggered when a GitHub Release is published (which creates a git tag).
+# Promotes the existing SHA-tagged image to semver + latest tags.
+# No rebuild — the image tested on main is the image deployed.
+
 on:
-  push:
-    tags: ["v*"]
+  release:
+    types: [published]
 
 env:
   REGISTRY: ghcr.io
@@ -31,10 +35,11 @@ jobs:
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           VERSION=${GITHUB_REF_NAME#v}
-          # The tag points to a commit — get its short SHA
+          MAJOR_MINOR=$(echo "$VERSION" | grep -oP '^\d+\.\d+')
           SHA_SHORT=$(echo "${{ github.sha }}" | cut -c1-7)
           echo "owner=${OWNER_LC}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "major_minor=${MAJOR_MINOR}" >> "$GITHUB_OUTPUT"
           echo "sha=${SHA_SHORT}" >> "$GITHUB_OUTPUT"
 
       - name: Install crane
@@ -43,13 +48,15 @@ jobs:
       - name: Promote image (retag sha → version + latest)
         run: |
           SRC="${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:sha-${{ steps.meta.outputs.sha }}"
-          DST_VER="${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:${{ steps.meta.outputs.version }}"
-          DST_LAT="${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:latest"
 
-          echo "Promoting ${SRC} → ${DST_VER}, ${DST_LAT}"
+          echo "Promoting ${SRC} →"
+          echo "  ${{ steps.meta.outputs.version }}"
+          echo "  ${{ steps.meta.outputs.major_minor }}"
+          echo "  latest"
 
-          crane copy "${SRC}" "${DST_VER}"
-          crane copy "${SRC}" "${DST_LAT}"
+          crane copy "${SRC}" "${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:${{ steps.meta.outputs.version }}"
+          crane copy "${SRC}" "${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:${{ steps.meta.outputs.major_minor }}"
+          crane copy "${SRC}" "${REGISTRY}/${{ steps.meta.outputs.owner }}/${{ matrix.image }}:latest"
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@master
