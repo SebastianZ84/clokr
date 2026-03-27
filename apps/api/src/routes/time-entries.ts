@@ -980,8 +980,11 @@ export async function updateOvertimeAccount(app: FastifyInstance, employeeId: st
   );
 
   // Determine if today has any entries — if so, include today in calculation
-  const effectiveStart =
-    employee?.hireDate && employee.hireDate > monthStart ? employee.hireDate : monthStart;
+  // Normalize hireDate to start-of-day to avoid time-of-day comparison issues
+  const hireDateNorm = employee?.hireDate
+    ? new Date(dateStrInTz(employee.hireDate, tz) + "T00:00:00Z")
+    : null;
+  const effectiveStart = hireDateNorm && hireDateNorm > monthStart ? hireDateNorm : monthStart;
   const todayStr = dateStrInTz(now, tz);
   const todayDate = new Date(todayStr + "T00:00:00Z");
   const yesterdayDate = new Date(todayDate.getTime() - 86400000);
@@ -1027,11 +1030,10 @@ export async function updateOvertimeAccount(app: FastifyInstance, employeeId: st
   const holidays = await app.prisma.publicHoliday.findMany({
     where: {
       tenant: { employees: { some: { id: employeeId } } },
-      date: { gte: monthStart, lte: effectiveEnd },
+      date: { gte: effectiveStart, lte: effectiveEnd },
     },
   });
   const holidayMinutes = holidays.reduce((sum, h) => {
-    if (employee?.hireDate && h.date < employee.hireDate) return sum;
     const dow = getDayOfWeekInTz(h.date, tz);
     return sum + getDayHoursFromSchedule(schedule, dow) * 60;
   }, 0);
@@ -1046,15 +1048,11 @@ export async function updateOvertimeAccount(app: FastifyInstance, employeeId: st
     },
   });
   const leaveMinutes = approvedLeave.reduce((sum, lr) => {
-    return (
-      sum +
-      calcExpectedMinutesTz(
-        schedule,
-        lr.startDate < monthStart ? monthStart : lr.startDate,
-        lr.endDate > effectiveEnd ? effectiveEnd : lr.endDate,
-        tz,
-      )
-    );
+    // Clamp leave range to effectiveStart..effectiveEnd (same range as expected)
+    const leaveStart = lr.startDate < effectiveStart ? effectiveStart : lr.startDate;
+    const leaveEnd = lr.endDate > effectiveEnd ? effectiveEnd : lr.endDate;
+    if (leaveStart > leaveEnd) return sum;
+    return sum + calcExpectedMinutesTz(schedule, leaveStart, leaveEnd, tz);
   }, 0);
 
   const diffHours =

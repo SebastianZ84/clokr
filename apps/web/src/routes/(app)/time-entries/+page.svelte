@@ -920,16 +920,28 @@
             >
             <td class="note-cell text-muted">{slot.note ?? "---"}</td>
             <td class="action-cell">
-              <span class="row-actions row-actions--visible">
-                <button class="btn-icon" onclick={() => openEdit(slot)} title="Bearbeiten"
-                  >✏️</button
-                >
-                <button
-                  class="btn-icon btn-icon-danger"
-                  onclick={() => (deleteConfirmId = slot.id)}
-                  title="Loeschen">🗑</button
-                >
-              </span>
+              {#if deleteConfirmId === slot.id}
+                <span class="del-confirm">
+                  <span class="text-muted" style="font-size:0.8rem;">Löschen?</span>
+                  <button class="btn btn-sm btn-danger" onclick={() => deleteEntry(slot.id)}
+                    >Ja</button
+                  >
+                  <button class="btn btn-sm btn-ghost" onclick={() => (deleteConfirmId = "")}
+                    >Nein</button
+                  >
+                </span>
+              {:else}
+                <span class="row-actions row-actions--visible">
+                  <button class="btn-icon" onclick={() => openEdit(slot)} title="Bearbeiten"
+                    >✏️</button
+                  >
+                  <button
+                    class="btn-icon btn-icon-danger"
+                    onclick={() => (deleteConfirmId = slot.id)}
+                    title="Löschen">🗑</button
+                  >
+                </span>
+              {/if}
             </td>
           </tr>
         {/each}
