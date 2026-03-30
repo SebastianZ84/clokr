@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-test-infrastructure-05-PLAN.md
-last_updated: "2026-03-30T09:17:29.464Z"
+stopped_at: Completed 01-test-infrastructure-01-PLAN.md
+last_updated: "2026-03-30T09:21:21.867Z"
 last_activity: 2026-03-30
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 6
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 01 (test-infrastructure) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Ready to execute
 Last activity: 2026-03-30
 
@@ -55,6 +55,7 @@ _Updated after each plan completion_
 | Phase 01 P02 | 8 | 2 tasks | 4 files |
 | Phase 01-test-infrastructure P03 | 5 | 2 tasks | 3 files |
 | Phase 01-test-infrastructure P05 | 6 | 2 tasks | 17 files |
+| Phase 01-test-infrastructure P01 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,7 @@ Recent decisions affecting current work:
 - [Phase 01-test-infrastructure]: vitest globalSetup (not setupFiles) for DATABASE_URL override — runs before worker module load, ensuring test DB URL is active when buildApp() executes
 - [Phase 01-test-infrastructure]: Shell source .env.test in pretest script — dotenv v17.3.1 ships no CLI binary; shell source handles quoted values correctly
 - [Phase 01-test-infrastructure]: try/catch in afterAll around cleanupTestData — prevents orphaned test data when tests fail mid-run
+- [Phase 01-test-infrastructure]: Use req.server.log.error in auth middleware (no app scope); type err as unknown for strict TS
 
 ### Pending Todos
 
@@ -85,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-30T09:17:29.460Z
-Stopped at: Completed 01-test-infrastructure-05-PLAN.md
+Last session: 2026-03-30T09:21:21.865Z
+Stopped at: Completed 01-test-infrastructure-01-PLAN.md
 Resume file: None
