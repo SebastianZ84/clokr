@@ -197,7 +197,7 @@ export async function timeEntryRoutes(app: FastifyInstance) {
           where: { id: apiKey.id },
           data: { lastUsedAt: new Date() },
         })
-        .catch(() => {});
+        .catch((err) => app.log.error({ err }, "Failed to update NFC card lastUsedAt"));
 
       // Mitarbeiter anhand NFC-Karten-ID ermitteln
       const employee = await app.prisma.employee.findFirst({
