@@ -20,7 +20,7 @@ Write compliance tests for all legally-critical business rules (ArbZG, tenant is
 - **D-04:** Address the decryptSafe migration state in Phase 2 — query DB, write test asserting all SMTP passwords are encrypted, migrate any plaintext found.
 
 ### Test Organization
-- **D-05:** Extend existing test files (auth.test.ts, leave.test.ts, time-entries.test.ts, etc.) with compliance-specific describe blocks. Do not create separate compliance files.
+- **D-05:** Extend existing test files (auth.test.ts, leave.test.ts, time-entries.test.ts, etc.) with compliance-specific describe blocks. Do not create separate compliance files. **Exception (user-approved 2026-03-30):** `tenant-isolation.test.ts` and `audit-trail.test.ts` MAY be created as standalone files — these cross-cutting concerns test 6 resource types × 2 tenants and 15 route files respectively, making embedding in a single existing file architecturally unsound.
 - **D-06:** Test tenant isolation (SEC-02) for every resource type: TimeEntry, LeaveRequest, Employee, Absence, OvertimeAccount, AuditLog. Cross-tenant reads AND writes must return 403/404.
 
 ### Font Self-Hosting (AUDIT-02)
