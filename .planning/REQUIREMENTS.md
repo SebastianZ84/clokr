@@ -16,7 +16,7 @@ Requirements for production launch. Each maps to roadmap phases.
 
 ### API Test Coverage
 
-- [ ] **API-01**: Time entry CRUD tests (create, edit, soft-delete, locked-month rejection, duplicate-day 409)
+- [x] **API-01**: Time entry CRUD tests (create, edit, soft-delete, locked-month rejection, duplicate-day 409)
 - [ ] **API-02**: Leave request lifecycle tests (request, approve, reject, cancel, cancellation-approve, cross-year booking)
 - [ ] **API-03**: Overtime saldo and Monatsabschluss tests (saldo read, month-close trigger, locked-month immutability)
 - [ ] **API-04**: Auth flow tests (login, refresh, JWT expiry, role gates ADMIN/MANAGER/EMPLOYEE)
@@ -28,7 +28,7 @@ Requirements for production launch. Each maps to roadmap phases.
 - [ ] **SEC-01**: ArbZG compliance unit tests (§3 daily max 10h, §3 24-week average, §4 breaks, §5 rest period, cross-midnight shifts)
 - [ ] **SEC-02**: Tenant isolation tests (cross-tenant reads/writes blocked on all resources)
 - [ ] **SEC-03**: Audit trail completeness tests (every mutating endpoint writes AuditLog with required fields)
-- [ ] **SEC-04**: Soft delete enforcement tests (DELETE sets deletedAt, queries filter deletedAt:null, locked-month entries undeletable)
+- [x] **SEC-04**: Soft delete enforcement tests (DELETE sets deletedAt, queries filter deletedAt:null, locked-month entries undeletable)
 - [ ] **SEC-05**: Timezone/date boundary tests (DST transitions, Dec 31→Jan 1, leap year, month-close at midnight CET vs UTC)
 
 ### Code Audit
@@ -104,7 +104,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-04     | Phase 1 | Complete |
 | AUDIT-01    | Phase 1 | Complete |
 | AUDIT-03    | Phase 1 | Complete |
-| API-01      | Phase 2 | Pending |
+| API-01      | Phase 2 | Complete |
 | API-02      | Phase 2 | Pending |
 | API-03      | Phase 2 | Pending |
 | API-04      | Phase 2 | Pending |
@@ -113,7 +113,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-01      | Phase 2 | Pending |
 | SEC-02      | Phase 2 | Pending |
 | SEC-03      | Phase 2 | Pending |
-| SEC-04      | Phase 2 | Pending |
+| SEC-04      | Phase 2 | Complete |
 | SEC-05      | Phase 2 | Pending |
 | AUDIT-02    | Phase 2 | Complete |
 | E2E-01      | Phase 3 | Pending |
