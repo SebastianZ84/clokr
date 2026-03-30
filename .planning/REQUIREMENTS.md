@@ -34,7 +34,7 @@ Requirements for production launch. Each maps to roadmap phases.
 ### Code Audit
 
 - [x] **AUDIT-01**: Eliminate all silent `.catch(() => {})` patterns (replace with `app.log.error`)
-- [ ] **AUDIT-02**: Google Fonts lokal hosten (DSGVO Art. 44 — kein externer Request an Google) (GitHub #100)
+- [x] **AUDIT-02**: Google Fonts lokal hosten (DSGVO Art. 44 — kein externer Request an Google) (GitHub #100)
 - [x] **AUDIT-03**: Docker seed script fix (pnpm@10 + Prisma 7 compatibility) (GitHub #119)
 
 ### E2E Tests
@@ -115,7 +115,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-03      | Phase 2 | Pending |
 | SEC-04      | Phase 2 | Pending |
 | SEC-05      | Phase 2 | Pending |
-| AUDIT-02    | Phase 2 | Pending |
+| AUDIT-02    | Phase 2 | Complete |
 | E2E-01      | Phase 3 | Pending |
 | E2E-02      | Phase 3 | Pending |
 | E2E-03      | Phase 3 | Pending |
