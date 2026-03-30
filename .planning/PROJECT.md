@@ -50,8 +50,9 @@ The app must be reliable, secure, and legally compliant enough to go live with r
 ## Context
 
 - Brownfield monorepo: `apps/api` (Fastify), `apps/web` (SvelteKit/Svelte 5), `packages/db` (Prisma/PostgreSQL)
-- Tests exist but coverage is thin — API tests use shared dev DB, E2E scaffolding exists but sparse
-- Known tech debt: saldo recalculation from hire date (perf), fire-and-forget `.catch(() => {})` patterns, shared test DB
+- Tests exist with ~41% line coverage — API tests now isolated to `?schema=test`, E2E uses shared storageState auth
+- Known tech debt: saldo recalculation from hire date (perf)
+- Phase 1 complete: silent catches eliminated, Docker seed fixed, no-floating-promises lint gate active, coverage thresholds enforced
 - Codebase map available at `.planning/codebase/` with 7 documents
 - UI was recently redesigned (dashboard, charts, skeleton loading) but mobile and consistency need work
 
@@ -92,4 +93,4 @@ This document evolves at phase transitions and milestone boundaries.
 
 ---
 
-_Last updated: 2026-03-30 after initialization_
+_Last updated: 2026-03-30 after Phase 1 (Test Infrastructure) completion_
