@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-test-infrastructure-01-PLAN.md
-last_updated: "2026-03-30T09:21:21.867Z"
+stopped_at: Completed 01-test-infrastructure-04-PLAN.md
+last_updated: "2026-03-30T09:29:39.143Z"
 last_activity: 2026-03-30
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 01 (test-infrastructure) — EXECUTING
-Plan: 5 of 6
+Plan: 6 of 6
 Status: Ready to execute
 Last activity: 2026-03-30
 
@@ -56,6 +56,7 @@ _Updated after each plan completion_
 | Phase 01-test-infrastructure P03 | 5 | 2 tasks | 3 files |
 | Phase 01-test-infrastructure P05 | 6 | 2 tasks | 17 files |
 | Phase 01-test-infrastructure P01 | 8 | 2 tasks | 4 files |
+| Phase 01-test-infrastructure P04 | 4 | 1 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting current work:
 - [Phase 01-test-infrastructure]: Shell source .env.test in pretest script — dotenv v17.3.1 ships no CLI binary; shell source handles quoted values correctly
 - [Phase 01-test-infrastructure]: try/catch in afterAll around cleanupTestData — prevents orphaned test data when tests fail mid-run
 - [Phase 01-test-infrastructure]: Use req.server.log.error in auth middleware (no app scope); type err as unknown for strict TS
+- [Phase Phase 01-test-infrastructure]: void operator for node-cron task.stop() — ScheduledTask.stop() is typed as void | Promise<void>, void makes intent explicit without rewriting hooks as async
+- [Phase Phase 01-test-infrastructure]: Type-aware ESLint scoped to **/*.ts only — Svelte files excluded because Svelte parser handles those separately and no-floating-promises doesn't apply cleanly to component event handlers
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-30T09:21:21.865Z
-Stopped at: Completed 01-test-infrastructure-01-PLAN.md
+Last session: 2026-03-30T09:29:39.140Z
+Stopped at: Completed 01-test-infrastructure-04-PLAN.md
 Resume file: None

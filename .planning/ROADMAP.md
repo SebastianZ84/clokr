@@ -39,7 +39,7 @@ Plans:
 - [x] 01-01-PLAN.md — Replace silent .catch(() => {}) with app.log.error (AUDIT-01)
 - [x] 01-02-PLAN.md — Fix Docker seed compilation for pnpm@10 + Prisma 7 (AUDIT-03)
 - [x] 01-03-PLAN.md — Add Playwright storageState setup project (TEST-02)
-- [ ] 01-04-PLAN.md — Enable no-floating-promises as blocking ESLint error (TEST-04)
+- [x] 01-04-PLAN.md — Enable no-floating-promises as blocking ESLint error (TEST-04)
 - [x] 01-05-PLAN.md — Isolate test DB via TEST_DATABASE_URL with ?schema=test (TEST-01)
 - [ ] 01-06-PLAN.md — Measure baseline coverage and enforce thresholds (TEST-03)
 

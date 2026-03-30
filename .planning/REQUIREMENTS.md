@@ -12,7 +12,7 @@ Requirements for production launch. Each maps to roadmap phases.
 - [x] **TEST-01**: Isolated test database via `TEST_DATABASE_URL` (no shared dev DB)
 - [x] **TEST-02**: Playwright `storageState` setup project (auth once, reuse across E2E specs)
 - [ ] **TEST-03**: Vitest coverage thresholds enforced (baseline measurement first)
-- [ ] **TEST-04**: ESLint `no-floating-promises` rule enabled and blocking
+- [x] **TEST-04**: ESLint `no-floating-promises` rule enabled and blocking
 
 ### API Test Coverage
 
@@ -101,7 +101,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-01     | Phase 1 | Complete |
 | TEST-02     | Phase 1 | Complete |
 | TEST-03     | Phase 1 | Pending |
-| TEST-04     | Phase 1 | Pending |
+| TEST-04     | Phase 1 | Complete |
 | AUDIT-01    | Phase 1 | Complete |
 | AUDIT-03    | Phase 1 | Complete |
 | API-01      | Phase 2 | Pending |
