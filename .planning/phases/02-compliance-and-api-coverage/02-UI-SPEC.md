@@ -54,7 +54,9 @@ This is the only deliverable with visual implications.
 ### Font Files to Download
 
 Download WOFF2 files to `apps/web/static/fonts/`. Retain all declared weight variants as
-decided in D-10.
+decided in D-10. Note: multiple weight files are downloaded to preserve the full font family
+for design flexibility, but the UI design contract uses only 2 weights (400 and 600) for
+rendered text — see Typography section below.
 
 | Family | Weights | Files |
 |--------|---------|-------|
@@ -125,15 +127,15 @@ Exceptions: none for this phase.
 No new typography is introduced in Phase 2. The existing scale defined in `app.css` is
 authoritative. Documented here for executor reference.
 
+The design contract uses exactly 2 weights: 400 (regular) for body and labels, 600 (semibold)
+for headings and display text.
+
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px (1rem) | 400 (regular) | 1.65 |
-| Label / small | 13px (0.8125rem) | 500 (medium) | 1.4 |
+| Label / small | 13px (0.8125rem) | 400 (regular) | 1.4 |
 | Heading (h2) | 20px (1.25rem) | 600 (semibold) | 1.3 |
-| Display (h1) | 28px (1.75rem) | 700 (bold) | 1.3 |
-
-Only 2 weights used for body/label: 400 (regular) and 600 (semibold). Bold (700) is reserved
-for display headings only.
+| Display (h1) | 28px (1.75rem) | 600 (semibold) | 1.3 |
 
 **Source:** `app.css` lines 347–406 (global typography rules).
 
