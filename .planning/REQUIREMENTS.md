@@ -96,44 +96,44 @@ Explicitly excluded. Documented to prevent scope creep.
 
 Which phases cover which requirements. Updated during roadmap creation.
 
-| Requirement | Phase | Status  |
-| ----------- | ----- | ------- |
-| TEST-01     | TBD   | Pending |
-| TEST-02     | TBD   | Pending |
-| TEST-03     | TBD   | Pending |
-| TEST-04     | TBD   | Pending |
-| API-01      | TBD   | Pending |
-| API-02      | TBD   | Pending |
-| API-03      | TBD   | Pending |
-| API-04      | TBD   | Pending |
-| API-05      | TBD   | Pending |
-| API-06      | TBD   | Pending |
-| SEC-01      | TBD   | Pending |
-| SEC-02      | TBD   | Pending |
-| SEC-03      | TBD   | Pending |
-| SEC-04      | TBD   | Pending |
-| SEC-05      | TBD   | Pending |
-| AUDIT-01    | TBD   | Pending |
-| AUDIT-02    | TBD   | Pending |
-| AUDIT-03    | TBD   | Pending |
-| E2E-01      | TBD   | Pending |
-| E2E-02      | TBD   | Pending |
-| E2E-03      | TBD   | Pending |
-| E2E-04      | TBD   | Pending |
-| E2E-05      | TBD   | Pending |
-| UI-01       | TBD   | Pending |
-| UI-02       | TBD   | Pending |
-| UI-03       | TBD   | Pending |
-| UI-04       | TBD   | Pending |
-| UI-05       | TBD   | Pending |
+| Requirement | Phase   | Status  |
+| ----------- | ------- | ------- |
+| TEST-01     | Phase 1 | Pending |
+| TEST-02     | Phase 1 | Pending |
+| TEST-03     | Phase 1 | Pending |
+| TEST-04     | Phase 1 | Pending |
+| AUDIT-01    | Phase 1 | Pending |
+| AUDIT-03    | Phase 1 | Pending |
+| API-01      | Phase 2 | Pending |
+| API-02      | Phase 2 | Pending |
+| API-03      | Phase 2 | Pending |
+| API-04      | Phase 2 | Pending |
+| API-05      | Phase 2 | Pending |
+| API-06      | Phase 2 | Pending |
+| SEC-01      | Phase 2 | Pending |
+| SEC-02      | Phase 2 | Pending |
+| SEC-03      | Phase 2 | Pending |
+| SEC-04      | Phase 2 | Pending |
+| SEC-05      | Phase 2 | Pending |
+| AUDIT-02    | Phase 2 | Pending |
+| E2E-01      | Phase 3 | Pending |
+| E2E-02      | Phase 3 | Pending |
+| E2E-03      | Phase 3 | Pending |
+| E2E-04      | Phase 3 | Pending |
+| E2E-05      | Phase 3 | Pending |
+| UI-01       | Phase 3 | Pending |
+| UI-02       | Phase 3 | Pending |
+| UI-03       | Phase 3 | Pending |
+| UI-04       | Phase 3 | Pending |
+| UI-05       | Phase 3 | Pending |
 
 **Coverage:**
 
 - v1 requirements: 28 total
-- Mapped to phases: 0
-- Unmapped: 28 ⚠️
+- Mapped to phases: 28
+- Unmapped: 0
 
 ---
 
 _Requirements defined: 2026-03-30_
-_Last updated: 2026-03-30 after initial definition_
+_Last updated: 2026-03-30 after roadmap creation_
