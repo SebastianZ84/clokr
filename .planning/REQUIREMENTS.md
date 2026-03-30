@@ -19,9 +19,9 @@ Requirements for production launch. Each maps to roadmap phases.
 - [x] **API-01**: Time entry CRUD tests (create, edit, soft-delete, locked-month rejection, duplicate-day 409)
 - [x] **API-02**: Leave request lifecycle tests (request, approve, reject, cancel, cancellation-approve, cross-year booking)
 - [x] **API-03**: Overtime saldo and Monatsabschluss tests (saldo read, month-close trigger, locked-month immutability)
-- [ ] **API-04**: Auth flow tests (login, refresh, JWT expiry, role gates ADMIN/MANAGER/EMPLOYEE)
-- [ ] **API-05**: DSGVO anonymization tests (no hard delete, all fields anonymized, audit event written)
-- [ ] **API-06**: NFC terminal punch tests (punch endpoint, lastUsedAt update, API key scoping)
+- [x] **API-04**: Auth flow tests (login, refresh, JWT expiry, role gates ADMIN/MANAGER/EMPLOYEE)
+- [x] **API-05**: DSGVO anonymization tests (no hard delete, all fields anonymized, audit event written)
+- [x] **API-06**: NFC terminal punch tests (punch endpoint, lastUsedAt update, API key scoping)
 
 ### Compliance & Security
 
@@ -107,9 +107,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-01      | Phase 2 | Complete |
 | API-02      | Phase 2 | Complete |
 | API-03      | Phase 2 | Complete |
-| API-04      | Phase 2 | Pending |
-| API-05      | Phase 2 | Pending |
-| API-06      | Phase 2 | Pending |
+| API-04      | Phase 2 | Complete |
+| API-05      | Phase 2 | Complete |
+| API-06      | Phase 2 | Complete |
 | SEC-01      | Phase 2 | Pending |
 | SEC-02      | Phase 2 | Complete |
 | SEC-03      | Phase 2 | Complete |

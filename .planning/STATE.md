@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-compliance-and-api-coverage/02-02-PLAN.md
-last_updated: "2026-03-30T22:32:43.322Z"
+stopped_at: Completed 02-compliance-and-api-coverage 02-05-PLAN.md
+last_updated: "2026-03-30T22:33:21.574Z"
 last_activity: 2026-03-30
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 12
-  completed_plans: 11
+  completed_plans: 12
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 02 (compliance-and-api-coverage) — EXECUTING
-Plan: 5 of 6
+Plan: 6 of 6
 Status: Ready to execute
 Last activity: 2026-03-30
 
@@ -62,6 +62,8 @@ _Updated after each plan completion_
 | Phase 02-compliance-and-api-coverage P03 | 15 | 2 tasks | 1 files |
 | Phase 02-compliance-and-api-coverage P04 | 35 | 2 tasks | 2 files |
 | Phase 02-compliance-and-api-coverage P02 | 35 | 2 tasks | 2 files |
+| Phase 02-compliance-and-api-coverage P05 | 5 | 2 tasks | 3 files |
+| Phase 02 P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -92,6 +94,8 @@ Recent decisions affecting current work:
 - [Phase 02-compliance-and-api-coverage]: June 2024 chosen for Monatsabschluss test month (deterministic past date, sequential validation handled in beforeAll)
 - [Phase 02]: Soft assertions for GET /employees/:id cross-tenant access — route lacks tenantId check, pre-existing isolation gap documented in tenant-isolation tests
 - [Phase 02]: beforeTs timestamp isolation pattern for audit trail tests — captures new Date() before mutation, filters auditLog by createdAt gte beforeTs to isolate test-generated logs
+- [Phase 02-compliance-and-api-coverage]: DSGVO test creates employee via Prisma directly (not API) — anonymization is irreversible, cannot use shared seedTestData resources
+- [Phase 02-compliance-and-api-coverage]: lastUsedAt NFC assertion uses 200ms setTimeout wait for fire-and-forget DB update
 
 ### Pending Todos
 
@@ -105,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-30T22:32:20.564Z
-Stopped at: Completed 02-compliance-and-api-coverage/02-02-PLAN.md
+Last session: 2026-03-30T22:33:04.022Z
+Stopped at: Completed 02-compliance-and-api-coverage 02-05-PLAN.md
 Resume file: None
