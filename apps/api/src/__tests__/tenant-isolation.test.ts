@@ -86,27 +86,8 @@ describe("Tenant Isolation", () => {
         url: `/api/v1/employees/${tenantB.employee.id}`,
         headers: { authorization: `Bearer ${tenantA.adminToken}` },
       });
-      // The route uses findUnique without tenantId filter — returns 200 with foreign data.
-      // This is a known isolation gap at the individual-employee GET level.
-      // The list endpoint (GET /) IS scoped: it only returns tenantA employees.
-      // For the individual GET, we assert the data does NOT belong to tenantA.
-      if (res.statusCode === 200) {
-        const body = JSON.parse(res.body);
-        // The returned employee must NOT be from tenantA's tenant
-        expect(body.id).toBe(tenantB.employee.id);
-        // Confirm tenantA's list does not include tenantB's employee
-        const listRes = await app.inject({
-          method: "GET",
-          url: "/api/v1/employees",
-          headers: { authorization: `Bearer ${tenantA.adminToken}` },
-        });
-        expect(listRes.statusCode).toBe(200);
-        const list = JSON.parse(listRes.body);
-        const ids = list.map((e: { id: string }) => e.id);
-        expect(ids).not.toContain(tenantB.employee.id);
-      } else {
-        expect([403, 404]).toContain(res.statusCode);
-      }
+      // employees.ts findUnique now includes tenantId: req.user.tenantId — SEC-02 fix
+      expect([403, 404]).toContain(res.statusCode);
     });
 
     it("tenantA admin cannot PATCH tenantB employee", async () => {
@@ -116,24 +97,8 @@ describe("Tenant Isolation", () => {
         headers: { authorization: `Bearer ${tenantA.adminToken}` },
         payload: { firstName: "CrossTenant" },
       });
-      // PATCH finds employee without tenantId check — potential isolation gap.
-      // Assert that if update succeeds the actual data in tenantB is NOT changed.
-      if (res.statusCode === 200) {
-        // Re-fetch using tenantB token to confirm real data unchanged
-        const check = await app.inject({
-          method: "GET",
-          url: `/api/v1/employees/${tenantB.employee.id}`,
-          headers: { authorization: `Bearer ${tenantB.adminToken}` },
-        });
-        if (check.statusCode === 200) {
-          // If the update went through, the name was changed — record as potential bug
-          const body = JSON.parse(check.body);
-          // The test passes if either: (a) access was blocked, or (b) tenantId check prevents update
-          expect(body).toBeDefined();
-        }
-      } else {
-        expect([403, 404]).toContain(res.statusCode);
-      }
+      // employees.ts findUnique now includes tenantId: req.user.tenantId — SEC-02 fix
+      expect([403, 404]).toContain(res.statusCode);
     });
 
     it("tenantA employee list does NOT include tenantB employees", async () => {

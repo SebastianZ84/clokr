@@ -87,7 +87,7 @@ export async function employeeRoutes(app: FastifyInstance) {
       }
 
       const employee = await app.prisma.employee.findUnique({
-        where: { id },
+        where: { id, tenantId: req.user.tenantId },
         include: {
           user: { select: { email: true, role: true, isActive: true } },
           workSchedules: { orderBy: { validFrom: "desc" }, take: 1 },
@@ -221,7 +221,7 @@ export async function employeeRoutes(app: FastifyInstance) {
       const { id } = idParamSchema.parse(req.params);
       const body = updateEmployeeSchema.parse(req.body);
 
-      const employee = await app.prisma.employee.findUnique({ where: { id } });
+      const employee = await app.prisma.employee.findUnique({ where: { id, tenantId: req.user.tenantId } });
       if (!employee) return reply.code(404).send({ error: "Mitarbeiter nicht gefunden" });
 
       const updates: Record<string, unknown> = {};
