@@ -4,6 +4,14 @@ Resolved debug sessions. Used by `gsd-debugger` to surface known-pattern hypothe
 
 ---
 
+## unit-test-fixes — 7 unit test failures across 5 files after E2E debug session changes
+- **Date:** 2026-03-31
+- **Error patterns:** tenant isolation, cross-tenant, 429 rate limit, 401, overtime balance -158, SaldoSnapshot null, unique constraint, jti, refresh token, arbzg, rolling average
+- **Root cause:** Five independent root causes: (1) GET /time-entries lacked employee.tenantId filter allowing cross-tenant reads; (2) DELETE /time-entries/:id had no tenant check; (3) NFC punch route max:10 rate limit hit by 11+ test requests; (4) Auth refresh token missing jti caused unique constraint collisions; (5) Test assertions used dates outside calculation range (2025-03-03 for overtime in 2026, UTC midnight for Berlin UTC+2 SaldoSnapshot); also arbzg test reused empUser.id violating Employee.userId unique constraint, and used mid-window changedDate yielding 7.71h avg instead of 8.33h.
+- **Fix:** time-entries.ts GET: add employee.tenantId filter; DELETE: include employee relation + tenant check; nfc-punch: isTest ? 1000 : 10 rate limit; auth.ts refresh: add jti to new refresh token; overtime-calc.test: use pastDate(3) and widen SaldoSnapshot query to gte:"2024-05-31"; arbzg.test: create dedicated user for avgEmployee and set changedDate to 2024-06-14T17:00:00Z.
+- **Files changed:** apps/api/src/routes/time-entries.ts, apps/api/src/routes/auth.ts, apps/api/src/__tests__/overtime-calc.test.ts, apps/api/src/routes/__tests__/arbzg.test.ts
+---
+
 ## e2e-test-fixes — E2E Playwright 135 desktop-chrome tests failing (0 failures after fix)
 - **Date:** 2026-03-31
 - **Error patterns:** SecurityError, about:blank, storageState, rate limit, 429, networkidle, PUT intercept, POST intercept, nested label, aria-label, min-height, touch target, mobile overflow, table-wrap, notification poller, monatsabschluss, modal timeout, waitForLoadState hung
