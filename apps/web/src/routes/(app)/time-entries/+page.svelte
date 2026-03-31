@@ -975,6 +975,7 @@
       <div class="cal-grid">
         {#each calendarDays as day (day.dateStr)}
           <div
+            data-date={day.dateStr}
             class="cal-day cal-day--{day.status}{day.absenceType && !day.isWeekend
               ? ' cal-day--abs cal-day--abs-' + day.absenceType.toLowerCase()
               : ''}"
@@ -1182,13 +1183,13 @@
             <input id="f-start" type="time" bind:value={formStart} class="form-input" />
           </div>
           <div class="form-group">
-            <label class="form-label" for="f-end">
-              Arbeitsende
+            <div class="form-label-row">
+              <label class="form-label" for="f-end">Arbeitsende</label>
               <label class="end-toggle">
-                <input type="checkbox" bind:checked={formHasEnd} />
+                <input type="checkbox" bind:checked={formHasEnd} aria-label="Arbeitsende erfasst" />
                 <span class="text-muted" style="font-size:0.8rem;font-weight:400;">erfasst</span>
               </label>
-            </label>
+            </div>
             <input
               id="f-end"
               type="time"
@@ -1216,9 +1217,9 @@
           {/if}
           {#each formBreaks as brk, i}
             <div class="break-row">
-              <input type="time" bind:value={brk.start} class="form-input" />
+              <input type="time" bind:value={brk.start} class="form-input" aria-label={`Pause ${i + 1} Beginn`} />
               <span class="break-sep">&ndash;</span>
-              <input type="time" bind:value={brk.end} class="form-input" />
+              <input type="time" bind:value={brk.end} class="form-input" aria-label={`Pause ${i + 1} Ende`} />
               <button
                 class="btn-icon"
                 type="button"
@@ -1334,7 +1335,8 @@
     background: var(--color-surface);
     border: 1.5px solid var(--gray-200, #e5e7eb);
     border-radius: 8px;
-    padding: 0.4375rem;
+    padding: 0.6875rem;
+    min-height: 44px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1365,7 +1367,8 @@
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.6875rem 0.5rem;
+    min-height: 44px;
     border-radius: var(--radius-sm);
     transition: background 0.15s;
   }
@@ -2043,6 +2046,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
+  }
+  .form-label-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+  }
+  .form-label-row .form-label {
+    margin-bottom: 0;
   }
   .end-toggle {
     display: inline-flex;

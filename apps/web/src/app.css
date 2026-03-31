@@ -494,6 +494,7 @@ button {
   justify-content: center;
   gap: 0.4rem;
   padding: 0.625rem 1.35rem;
+  min-height: 44px; /* WCAG 2.5.5 touch target minimum */
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -578,7 +579,7 @@ button {
 .btn-sm {
   padding: 0.4rem 0.85rem;
   font-size: 0.875rem;
-  min-height: 32px; /* Touch target minimum */
+  min-height: 44px; /* WCAG 2.5.5 touch target minimum */
 }
 
 /* ── Page titles — consistent across all pages ─────────────────────── */
@@ -605,6 +606,8 @@ button {
 
 .btn-icon {
   padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px; /* WCAG 2.5.5 touch target minimum */
   aspect-ratio: 1;
   display: inline-flex;
   align-items: center;
@@ -1046,7 +1049,8 @@ select.form-input {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem 1.125rem;
+  padding: 0.6875rem 1.125rem;
+  min-height: 44px;
   font-family: var(--font-sans);
   font-size: 0.875rem;
   font-weight: 500;
