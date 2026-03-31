@@ -142,14 +142,14 @@ test.describe("UX Design Audit", () => {
           });
       });
 
-      // Check for buttons that are too small (< 32px height — touch target)
-      const tooSmall = buttons.filter((b) => b.height > 0 && b.height < 32 && b.text);
+      // Check for buttons that are too small (< 44px height — touch target per WCAG 2.5.5)
+      const tooSmall = buttons.filter((b) => b.height > 0 && b.height < 44 && b.text);
       for (const b of tooSmall) {
         findings.push({
           page: p.name,
           category: "Touch Targets",
-          severity: "major",
-          message: `Button too small (${Math.round(b.height)}px height, min 32px for touch)`,
+          severity: "critical",
+          message: `Button too small (${Math.round(b.height)}px height, min 44px for touch)`,
           element: b.text,
         });
       }
