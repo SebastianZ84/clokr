@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/node-cron": "^3.0.11",
-    "@types/nodemailer": "^7.0.11",
+    "@types/nodemailer": "^8.0.0",
     "@types/pdfkit": "^0.17.5",
     "@types/pg": "^8.20.0",
     "fastify-plugin": "^5.1.0",
