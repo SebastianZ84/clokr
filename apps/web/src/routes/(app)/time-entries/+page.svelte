@@ -1115,7 +1115,7 @@
   </div>
   {#if allEntries.length === 0}
     <div class="card card-body" style="text-align:center;padding:2rem;">
-      <p class="text-muted">Keine Zeiteintraege in diesem Monat.</p>
+      <p class="text-muted">Keine Zeiteinträge in diesem Monat.</p>
     </div>
   {/if}
 {/if}

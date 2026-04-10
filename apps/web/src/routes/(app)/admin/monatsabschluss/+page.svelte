@@ -434,7 +434,7 @@
                         closeMonth(ms.month);
                       }}
                     >
-                      Abschliessen
+                      Abschließen
                     </button>
                   {:else}
                     <span class="text-muted text-sm">&mdash;</span>
