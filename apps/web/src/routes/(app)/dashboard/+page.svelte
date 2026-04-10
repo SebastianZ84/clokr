@@ -919,7 +919,11 @@
             <tbody>
               <tr>
                 {#each myWeekDays as day (day.date)}
-                  {@const isToday = day.date === new Date().toISOString().split("T")[0]}
+                  {@const todayStr = new Date().toISOString().split("T")[0]}
+                  {@const isPast = day.date < todayStr}
+                  {@const isToday = day.date === todayStr}
+                  {@const dayOfWeek = new Date(day.date + "T12:00:00").getDay()}
+                  {@const isWeekend = dayOfWeek === 0 || dayOfWeek === 6}
                   <td class:is-today={isToday}>
                     <a
                       href="/time-entries?view=list&date={day.date}"
@@ -934,7 +938,7 @@
                         <span class="cell-badge cell-badge--partial"
                           >{day.workedHours.toFixed(1)}</span
                         >
-                      {:else if day.status === "missing"}
+                      {:else if day.status === "missing" && isPast && !isWeekend}
                         <span class="cell-badge cell-badge--missing">⚠️</span>
                       {:else}
                         <span class="cell-badge cell-badge--none">–</span>
