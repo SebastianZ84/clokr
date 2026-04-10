@@ -48,6 +48,7 @@ None.
 | 260410-ey6 | fix employee deletion 2-step flow + time-entries/leave month navigation | 2026-04-10 | c82eadb | [260410-ey6-fix-employee-deletion-2-step-flow-time-e](./quick/260410-ey6-fix-employee-deletion-2-step-flow-time-e/) |
 | 260410-idv | Fix reports.ts to exclude anonymized/inactive employees from monthly report and DATEV export queries | 2026-04-10 | f69855a | [260410-idv-fix-reports-ts-to-exclude-anonymized-ina](./quick/260410-idv-fix-reports-ts-to-exclude-anonymized-ina/) |
 | 260411-086 | Fix all ESLint warnings across apps/api and apps/web | 2026-04-11 | 8842f34 | [260411-086-fix-all-eslint-warnings-across-apps-api-](./quick/260411-086-fix-all-eslint-warnings-across-apps-api-/) |
+| 260411-22u | UI/UX consistency fixes: tabs, typos, empty states, berichte, badge, row height, accordion, vdev, profil subtitle, warning fatigue | 2026-04-11 | 5f66f25 | [260411-22u-ui-ux-consistency-fixes-tabs-typos-empty](./quick/260411-22u-ui-ux-consistency-fixes-tabs-typos-empty/) |
 
 ### Blockers/Concerns
 
