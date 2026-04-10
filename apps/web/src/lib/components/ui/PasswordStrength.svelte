@@ -39,7 +39,7 @@
       ></div>
     </div>
     <ul class="pw-checks">
-      {#each checks as c}
+      {#each checks as c (c.label)}
         <li class="pw-check" class:pw-check-ok={c.ok}>
           <span class="pw-check-icon">{c.ok ? "✓" : "○"}</span>
           {c.label}

@@ -312,7 +312,7 @@
       </div>
 
       <nav class="sidebar-nav" aria-label="Hauptnavigation">
-        {#each navItems as item}
+        {#each navItems as item (item.href)}
           {@const active =
             item.href === "/dashboard"
               ? $page.url.pathname === "/dashboard"
@@ -449,7 +449,7 @@
 
     <!-- Mobile Bottom Nav -->
     <nav class="mobile-nav" aria-label="Mobile Navigation">
-      {#each navItems as item}
+      {#each navItems as item (item.href)}
         {@const active =
           item.href === "/dashboard"
             ? $page.url.pathname === "/dashboard"

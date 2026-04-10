@@ -932,7 +932,7 @@
           <button onclick={() => pickerYear++}>›</button>
         </div>
         <div class="month-picker-grid">
-          {#each MONTH_NAMES_SHORT as name, i}
+          {#each MONTH_NAMES_SHORT as name, i (i)}
             <button
               class="month-picker-btn"
               class:active={i === calMonth.getMonth() && pickerYear === calMonth.getFullYear()}
@@ -961,7 +961,7 @@
   <div class="cal-section card">
     <!-- Wochentage-Header -->
     <div class="cal-grid cal-header-row">
-      {#each ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] as d}
+      {#each ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] as d (d)}
         <div class="cal-dow">{d}</div>
       {/each}
     </div>
@@ -969,7 +969,7 @@
     <!-- Tage -->
     {#if loading}
       <div class="cal-grid">
-        {#each Array(35) as _}<div class="cal-day skeleton"></div>{/each}
+        {#each Array(35) as _, i (i)}<div class="cal-day skeleton"></div>{/each}
       </div>
     {:else}
       <div class="cal-grid">
@@ -1071,7 +1071,7 @@
                 <span class="list-arbzg-hint"
                   >{slotArbzg.some((w) => w.severity === "error") ? "⛔" : "⚠️"}<span
                     class="arbzg-tooltip"
-                    >{#each slotArbzg as w, i}{w.message}{#if i < slotArbzg.length - 1}<br
+                    >{#each slotArbzg as w, i (i)}{w.message}{#if i < slotArbzg.length - 1}<br
                         />{/if}{/each}</span
                   ></span
                 >
@@ -1215,7 +1215,7 @@
               >
             </div>
           {/if}
-          {#each formBreaks as brk, i}
+          {#each formBreaks as brk, i (i)}
             <div class="break-row">
               <input type="time" bind:value={brk.start} class="form-input" aria-label={`Pause ${i + 1} Beginn`} />
               <span class="break-sep">&ndash;</span>
