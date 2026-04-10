@@ -369,7 +369,9 @@
             Abmelden
           </button>
         </div>
-        <p class="sidebar-version">v{__APP_VERSION__}</p>
+        {#if __APP_VERSION__ && __APP_VERSION__ !== 'dev'}
+          <p class="sidebar-version">v{__APP_VERSION__}</p>
+        {/if}
       </div>
     </aside>
 
@@ -559,7 +561,7 @@
     height: 1rem;
     padding: 0 0.25rem;
     border-radius: 9999px;
-    background-color: var(--color-danger, #ef4444);
+    background-color: var(--color-brand);
     color: #fff;
     font-size: 0.6875rem;
     font-weight: 700;
