@@ -39,7 +39,7 @@
     loading = true;
     try {
       rules = await api.get<SpecialLeaveRule[]>("/special-leave/rules");
-    } catch (e) {
+    } catch {
       toasts.error("Fehler beim Laden der Sonderurlaubsregeln");
     } finally {
       loading = false;

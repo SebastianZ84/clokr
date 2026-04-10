@@ -70,8 +70,8 @@
 
   async function loadEmployees() {
     try {
-      const data = await api.get<any>("/employees?limit=500");
-      allEmployees = data.employees ?? data;
+      const data = await api.get<{ employees?: Employee[] } | Employee[]>("/employees?limit=500");
+      allEmployees = (Array.isArray(data) ? data : data.employees) ?? [];
     } catch {
       // ignore
     }

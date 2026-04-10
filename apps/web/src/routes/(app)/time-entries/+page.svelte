@@ -607,7 +607,7 @@
       closeModal();
       await loadAll();
     } catch (e: unknown) {
-      if ((e as any)?.status === 403) {
+      if (e instanceof Error && "status" in e && (e as { status: number }).status === 403) {
         saveError = "Monat ist gesperrt";
       } else {
         saveError = e instanceof Error ? e.message : "Fehler beim Speichern";
@@ -623,7 +623,7 @@
       deleteConfirmId = "";
       await loadAll();
     } catch (e: unknown) {
-      if ((e as any)?.status === 403) {
+      if (e instanceof Error && "status" in e && (e as { status: number }).status === 403) {
         error = "Monat ist gesperrt";
       } else {
         error = e instanceof Error ? e.message : "Fehler beim Löschen";

@@ -150,7 +150,7 @@
       try {
         const from = weekDays[0];
         const to = weekDays[6];
-        timeEntries = await api.get<any[]>(`/time-entries?from=${from}&to=${to}`);
+        timeEntries = await api.get<typeof timeEntries>(`/time-entries?from=${from}&to=${to}`);
       } catch (err) {
         console.error("Failed to load time entries for shift view:", err);
       }
