@@ -369,6 +369,58 @@ When `pageSize` changes, the component resets `page = 1` internally and then cal
 
 ---
 
+## CSS Architecture: Global vs Scoped
+
+### Decision rule
+
+| What | Where | Why |
+|------|-------|-----|
+| Design tokens (`--color-*`, `--font-*`, etc.) | `app.css` | Single source of truth, resolved at runtime |
+| Shared class bases used by **≥ 2 components** (e.g. `.cal-cell`, `.cal-today`) | `app.css` | One place to change, no cascade fights |
+| Component-specific layout, spacing, variants | Component `<style>` block | Scoped by Svelte hash, isolated |
+| Hover/focus/active states that are purely local | Component `<style>` block | No risk of leaking |
+| Library/third-party overrides | Component `<style>` with `.wrapper :global { }` | Minimally invasive |
+
+### Svelte scoping gotchas
+
+Svelte injects a `.svelte-HASH` selector on every scoped rule, giving it **+1 class specificity** over a matching global rule — even when both have `!important`. Component styles always win if specificity is equal.
+
+**Consequence:** if an `app.css` rule and a component `:global()` rule target the same selector, the component rule wins regardless of source order. Fix: move the rule to `app.css` entirely.
+
+**Compound `:global()` selectors are broken.** Svelte cannot correctly hash compound selectors that mix scoped and global parts:
+
+```svelte
+/* BAD — Svelte filters this out, rule never applies */
+:global(.cal-cell.cal-selected:not(.cal-other)) { ... }
+
+/* GOOD — put it in app.css directly, no wrapper needed */
+```
+
+Only use `:global()` in a component when overriding a child component's internals from a parent, and always wrap it tightly:
+
+```svelte
+<style>
+  .wrapper :global(.third-party-class) { ... }  /* ✓ scoped to .wrapper */
+</style>
+```
+
+### Naming conventions
+
+| Class type | Convention | Example |
+|------------|------------|---------|
+| Shared global (multi-component) | `domain-concept` | `.cal-cell`, `.cal-today`, `.month-summary` |
+| Component-private | short, descriptive | `.cell`, `.nav`, `.chip` |
+| State modifiers | `cal-` prefix for shared states | `.cal-selected`, `.cal-other`, `.cal-weekend` |
+| BEM variants | only inside a component | `.card__header`, `.card--highlighted` |
+
+### Avoiding `!important` wars
+
+- **Do not use `!important` in `app.css`** for anything except explicit state overrides (weekend bg, today ring, etc.) — document each one with a comment explaining why.
+- Component scoped rules never need `!important` to beat global defaults (they win via specificity).
+- If two rules both need `!important`, the one with **higher specificity** wins; same specificity = the one injected later (component > app.css). Resolve by moving the authoritative rule to `app.css` and deleting the duplicate.
+
+---
+
 ## Accessibility Checklist
 
 - [ ] All interactive elements: `min-height: 44px` (WCAG 2.5.5)
