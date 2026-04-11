@@ -871,8 +871,8 @@
   </div>
 {/if}
 
-<!-- ── Monat-Navigation (beide Ansichten) ────────────────────────────────── -->
-<div class="cal-nav month-nav-standalone">
+<!-- ── Monat-Navigation (snippet, wiederverwendet in Kalender + Liste) ───── -->
+{#snippet navContent()}
   <button class="nav-btn" onclick={() => gotoMonth(-1)} title="Vorheriger Monat">
     <svg
       width="18"
@@ -934,11 +934,14 @@
       stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg
     >
   </button>
-</div>
+{/snippet}
 
 <!-- ── Kalender ─────────────────────────────────────────────────────────── -->
 {#if teView === "calendar"}
   <div class="cal-section card card-animate">
+    <div class="cal-nav">
+      {@render navContent()}
+    </div>
     <!-- Wochentage-Header -->
     <div class="cal-grid cal-header-row">
       {#each ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] as d (d)}
@@ -1024,6 +1027,9 @@
 
 <!-- ── Listenansicht ──────────────────────────────────────────────────── -->
 {#if teView === "list"}
+  <div class="cal-nav month-nav-standalone">
+    {@render navContent()}
+  </div>
   <div class="table-wrapper">
     <table class="data-table">
       <thead>
