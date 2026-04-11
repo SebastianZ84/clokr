@@ -532,11 +532,18 @@ export async function employeeRoutes(app: FastifyInstance) {
   // DELETE /api/v1/employees/:id/hard-delete — Endgültige Löschung nach Ablauf der Aufbewahrungsfrist
   // Darf nur auf bereits anonymisierte Mitarbeiter angewendet werden (firstName === "Gelöscht").
   // Gesetzliche Aufbewahrungsfrist: §147 AO / §257 HGB — 10 Jahre nach Austritt/Anlage.
+  // Optional body: { forceDelete?: boolean } — bypasses retention check when true (admin override).
+  // Every force-delete is flagged in the audit log for auditor traceability.
+  const forceDeleteBodySchema = z
+    .object({ forceDelete: z.boolean().optional() })
+    .optional();
+
   app.delete("/:id/hard-delete", {
     schema: { tags: ["Mitarbeiter"], security: [{ bearerAuth: [] }] },
     preHandler: requireRole("ADMIN"),
     handler: async (req, reply) => {
       const { id } = idParamSchema.parse(req.params);
+      const { forceDelete } = forceDeleteBodySchema.parse(req.body ?? {}) ?? {};
 
       const employee = await app.prisma.employee.findUnique({
         where: { id, tenantId: req.user.tenantId },
@@ -544,7 +551,7 @@ export async function employeeRoutes(app: FastifyInstance) {
       });
       if (!employee) return reply.code(404).send({ error: "Mitarbeiter nicht gefunden" });
 
-      // Guard: must be already anonymized
+      // Guard: must be already anonymized — forceDelete does NOT bypass this rule
       if (employee.firstName !== "Gelöscht") {
         return reply.code(409).send({ error: "Mitarbeiter muss zuerst anonymisiert werden" });
       }
@@ -561,14 +568,15 @@ export async function employeeRoutes(app: FastifyInstance) {
         59,
         59,
       );
-      if (new Date() < retentionExpires) {
+      if (new Date() < retentionExpires && !forceDelete) {
         return reply.code(409).send({
           error: "Aufbewahrungsfrist noch nicht abgelaufen",
           retentionExpiresAt: retentionExpires.toISOString(),
         });
       }
 
-      // Audit log BEFORE deletion (entity will be gone after)
+      // Audit log BEFORE deletion (entity will be gone after).
+      // Include forceDelete flag and retentionExpiresAt so auditors can identify overrides.
       await app.audit({
         userId: req.user.sub,
         action: "HARD_DELETE",
@@ -578,6 +586,10 @@ export async function employeeRoutes(app: FastifyInstance) {
           employeeNumber: employee.employeeNumber,
           userEmail: employee.user.email,
           retentionStart: retentionStart.toISOString(),
+        },
+        newValue: {
+          forceDelete: forceDelete === true,
+          retentionExpiresAt: retentionExpires.toISOString(),
         },
         request: { ip: req.ip, headers: req.headers as Record<string, string> },
       });
