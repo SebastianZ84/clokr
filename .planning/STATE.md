@@ -5,7 +5,7 @@ milestone_name: milestone
 status: planning
 stopped_at: Completed 260411-086-03-PLAN.md
 last_updated: "2026-04-10T22:45:33.576Z"
-last_activity: "2026-04-10 - Completed quick task 260410-idv: Fix reports.ts to exclude anonymized/inactive employees from monthly report and DATEV export queries"
+last_activity: "2026-04-11 - Completed quick task 260411-drh: Allow early employee deletion before 10-year retention period with admin acknowledgement"
 progress:
   percent: 100
 ---
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-31 after v1.0 milestone)
 Phase: —
 Plan: —
 Status: v1.0 milestone complete — ready for next milestone planning
-Last activity: 2026-04-11 - Completed quick task 260411-de4: Pagination for all list views (10/25/50 dropdown, prev/next, Pagination component)
+Last activity: 2026-04-11 - Completed quick task 260411-drh: Allow early employee deletion before 10-year retention period with admin acknowledgement
 
 Progress: [██████████] 100%
 
@@ -53,6 +53,7 @@ None.
 | 260411-clm | Add pro theme: indigo accent, sharper corners, solid surfaces, denser layout (Datadog/Linear inspired) | 2026-04-11 | cd9e762 | [260411-clm-add-a-new-pro-theme-inspired-by-datadog-](./quick/260411-clm-add-a-new-pro-theme-inspired-by-datadog-/) |
 | 260411-ctn | Add notification dismissal: X button per notification + auto-dismiss when related action completed | 2026-04-11 | ad67aa0 | [260411-ctn-add-notification-dismissal-x-button-per-](./quick/260411-ctn-add-notification-dismissal-x-button-per-/) |
 | 260411-de4 | Pagination for all list views: limit to 10 entries, prev/next paging, rows-per-page dropdown (10/25/50), update UI style guide | 2026-04-11 | 0b348fa | [260411-de4-pagination-for-all-list-views-limit-to-1](./quick/260411-de4-pagination-for-all-list-views-limit-to-1/) |
+| 260411-drh | Allow early employee deletion before 10-year retention period with admin acknowledgement checkbox | 2026-04-11 | 11287e0 | [260411-drh-allow-early-employee-deletion-before-10-](./quick/260411-drh-allow-early-employee-deletion-before-10-/) |
 
 ### Blockers/Concerns
 
@@ -61,6 +62,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-10T22:45:33.574Z
-Stopped at: Completed 260411-086-03-PLAN.md
+Last session: 2026-04-11T08:02:23Z
+Stopped at: Completed 260411-drh-PLAN.md (checkpoint:human-verify)
 Resume file: None
