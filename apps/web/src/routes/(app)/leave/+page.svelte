@@ -912,7 +912,7 @@
 {/if}
 
 <!-- ── Mitarbeiter-Selector ───────────────────────────────────────────────── -->
-<div class="employee-selector">
+<div class="employee-selector card-animate">
   <label class="form-label" for="cal-emp-select">Mitarbeiter</label>
   <select
     id="cal-emp-select"
@@ -1226,7 +1226,7 @@
 {#if view === "calendar"}
   <!-- Urlaubsübersicht -->
   {#if showVacSummary}
-    <div class="vac-summary">
+    <div class="vac-summary card-animate">
       <div class="vac-summary-item">
         <span class="vac-summary-label">Jahresanspruch</span>
         <span class="vac-summary-value">{vacSummaryTotal} Tage</span>
@@ -1264,7 +1264,7 @@
     </div>
   {/if}
 
-  <div class="cal-section card">
+  <div class="cal-section card card-animate">
     <!-- Navigation -->
     <div class="cal-nav">
       <button class="nav-btn" onclick={prevMonth} title="Vorheriger Monat">

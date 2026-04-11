@@ -836,7 +836,7 @@
 
 <!-- ── Monats-Übersicht ───────────────────────────────────────────────── -->
 {#if schedule}
-  <div class="month-summary">
+  <div class="month-summary card-animate">
     <div class="msummary-item">
       <span class="msummary-label"
         >{hasMonthlyTarget ? "Soll (Monat)" : isMonthlyHours ? "Soll" : "Soll (bisher)"}</span
@@ -938,7 +938,7 @@
 
 <!-- ── Kalender ─────────────────────────────────────────────────────────── -->
 {#if teView === "calendar"}
-  <div class="cal-section card">
+  <div class="cal-section card card-animate">
     <!-- Wochentage-Header -->
     <div class="cal-grid cal-header-row">
       {#each ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] as d (d)}
