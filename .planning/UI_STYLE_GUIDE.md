@@ -297,6 +297,78 @@ Never use hardcoded hex colors for calendar cell backgrounds.
 
 ---
 
+## Pagination
+
+Component: `$components/ui/Pagination.svelte`
+
+### Props Interface
+
+```ts
+interface Props {
+  total: number;                   // total item count (before paging)
+  page?: number;                   // current 1-based page, bindable (default 1)
+  pageSize?: number;               // current rows-per-page, bindable (default 10)
+  pageSizeOptions?: number[];      // default [10, 25, 50]
+  labelSingular?: string;          // default "Eintrag" (German)
+  labelPlural?: string;            // default "Einträge" (German)
+  showWhenSinglePage?: boolean;    // default false (auto-hide when total <= min(pageSizeOptions))
+  onChange?: (p: { page: number; pageSize: number }) => void; // optional callback for server-side
+}
+```
+
+### Client-Side Usage (most list views)
+
+```svelte
+<script lang="ts">
+  import Pagination from "$components/ui/Pagination.svelte";
+
+  let page = $state(1);
+  let pageSize = $state(10);
+
+  // Must come AFTER the filteredX $derived declaration
+  let pagedItems = $derived(filteredItems.slice((page - 1) * pageSize, page * pageSize));
+
+  // Reset to page 1 whenever the filtered set changes (e.g. search/filter change)
+  $effect(() => {
+    const _len = filteredItems.length; // track
+    page = 1;
+  });
+</script>
+
+<table>
+  <tbody>
+    {#each pagedItems as item (item.id)}
+      <tr>...</tr>
+    {/each}
+  </tbody>
+</table>
+
+<Pagination total={filteredItems.length} bind:page bind:pageSize />
+```
+
+### Server-Side Usage (audit log and similar)
+
+```svelte
+<Pagination
+  total={total}
+  bind:page
+  bind:pageSize
+  onChange={() => loadLogs()}
+/>
+```
+
+When `pageSize` changes, the component resets `page = 1` internally and then calls `onChange`. The `onChange` callback is responsible for re-fetching data with the new `page` and `pageSize` values.
+
+### Rules
+
+- Every list view with potentially >10 rows MUST use `Pagination`. Default `pageSize` is 10. Page state is component-local `$state` — do NOT persist to localStorage.
+- The component auto-hides when `total <= 10` (smallest `pageSizeOptions`). Pass `showWhenSinglePage={true}` only for dashboards where an explicit "no more results" indicator is desired.
+- Always reset `page = 1` when filters/search change, using `$effect`.
+- Place `<Pagination>` immediately after the closing `</table>` (or equivalent list wrapper), inside the same `.card` / `.table-wrapper` so it visually belongs to the table.
+- Import path: `import Pagination from "$components/ui/Pagination.svelte";`
+
+---
+
 ## Accessibility Checklist
 
 - [ ] All interactive elements: `min-height: 44px` (WCAG 2.5.5)
