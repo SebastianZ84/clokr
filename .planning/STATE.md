@@ -1,13 +1,20 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
+milestone: v1.1
+milestone_name: Reporting & DATEV
+status: in_progress
 last_updated: "2026-04-11T18:47:11.868Z"
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 2
   total_plans: 7
   completed_plans: 7
-  percent: 100
+  percent: 67
 ---
+
+## Accumulated Context
+
+### Roadmap Evolution
+- Phase 4 added: DATEV code cleanup
+- Phase 5 added: Saldo performance & presence resolver
+- Phase 6 added: PDF Exports — Monatsbericht, Urlaubsliste, Abteilungsbericht
