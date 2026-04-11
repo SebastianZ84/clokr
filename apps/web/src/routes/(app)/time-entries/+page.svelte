@@ -1309,12 +1309,6 @@
   }
 
   /* ── Kalender ─────────────────────────────────────────────────────── */
-  .cal-section {
-    padding: 0;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-
   .cal-nav {
     display: flex;
     align-items: center;
@@ -1510,21 +1504,6 @@
     grid-template-columns: repeat(7, 1fr);
   }
 
-  .cal-header-row {
-    border-bottom: 1.5px solid var(--gray-200, #e5e7eb);
-    background: var(--gray-50, #f9fafb);
-  }
-
-  .cal-dow {
-    padding: 0.5rem;
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-muted);
-  }
-
   .cal-cell {
     min-height: 72px;
     padding: 0.3rem 0.4rem;
@@ -1541,12 +1520,6 @@
   }
   .cal-cell:nth-child(7n) {
     border-right: none;
-  }
-
-  :global(.cal-cell.cal-other) {
-    opacity: 0.3 !important;
-    cursor: default;
-    background: var(--gray-50, #f9fafb) !important;
   }
 
   /* Tage vor dem Eintrittsdatum */
@@ -1571,10 +1544,6 @@
     box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-brand) 25%, transparent);
   }
 
-  .cal-cell.cal-today {
-    box-shadow: inset 0 0 0 2px var(--color-brand);
-  }
-
   /* :global nötig – Svelte doppelt den Scope-Hash bei Compound-Selektoren */
   :global(.cal-cell.cal-selected:not(.cal-other)) {
     background-color: var(--color-brand) !important;
@@ -1594,20 +1563,6 @@
   :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .cal-day-num) {
     background: rgba(255, 255, 255, 0.25);
     color: white;
-  }
-
-  /* Wochenende + Feiertage */
-  /* Weekend + holiday cell styles → global in app.css */
-  .cal-holiday-label {
-    display: block;
-    font-size: 0.6rem;
-    color: var(--color-brand);
-    font-weight: 600;
-    line-height: 1.2;
-    margin-top: 0.1rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   /* Status-Farben */
@@ -1645,24 +1600,6 @@
     white-space: nowrap;
   }
 
-  .cal-day-num {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  .cal-today .cal-day-num {
-    background: var(--color-brand);
-    color: white;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.65rem;
-  }
   .day-worked {
     font-size: 0.75rem;
     font-weight: 700;

@@ -2483,12 +2483,6 @@
   }
 
   /* ── Kalender ─────────────────────────────────────────────────────── */
-  .cal-section {
-    padding: 0;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-
   .cal-nav {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -2639,19 +2633,6 @@
     grid-template-columns: repeat(7, 1fr);
     user-select: none;
   }
-  .cal-header-row {
-    border-bottom: 1.5px solid var(--gray-200, #e5e7eb);
-    background: var(--gray-50, #f9fafb);
-  }
-  .cal-dow {
-    padding: 0.5rem;
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-muted);
-  }
 
   .cal-loading {
     opacity: 0.5;
@@ -2659,7 +2640,6 @@
   }
 
   .cal-cell {
-    background: #fff;
     min-height: 72px;
     padding: 0.3rem 0.4rem 0.4rem;
     border-right: 1px solid var(--gray-100, #f3f4f6);
@@ -2672,16 +2652,6 @@
   }
   .cal-cell:nth-child(7n) {
     border-right: none;
-  }
-
-  :global(.cal-cell.cal-other) {
-    opacity: 0.3 !important;
-    cursor: default;
-    background: var(--gray-50, #f9fafb) !important;
-  }
-  /* Weekend + holiday cell styles → global in app.css */
-  .cal-today {
-    box-shadow: inset 0 0 0 2px var(--color-brand);
   }
 
   .cal-cell.cal-current {
@@ -2697,33 +2667,7 @@
   }
 
   .cal-day-num {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    line-height: 1;
-    flex-shrink: 0;
     z-index: 1;
-  }
-  .cal-today .cal-day-num {
-    background: var(--color-brand);
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-  }
-
-  .cal-holiday-label {
-    font-size: 0.6875rem;
-    color: #6b21a8;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 1px 2px;
   }
 
   .cal-chips {
