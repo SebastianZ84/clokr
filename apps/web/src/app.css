@@ -1740,10 +1740,17 @@ textarea.form-input {
 .cal-cell {
   background: var(--color-surface);
 }
-.cal-cell.cal-other {
-  opacity: 0.3 !important;
+/* WR-02: skeleton must override base background */
+.cal-cell.skeleton {
+  background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+/* WR-03: no !important — higher specificity handles conflict with status classes */
+.cal-cell.cal-other:not(.cal-selected) {
+  opacity: 0.3;
   cursor: default;
-  background: var(--gray-50, #f9fafb) !important;
+  background: var(--gray-50, #f9fafb);
 }
 .cal-today {
   box-shadow: inset 0 0 0 2px var(--color-brand);

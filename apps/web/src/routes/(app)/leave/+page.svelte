@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, preventDefault, self } from "svelte/legacy";
+  import { preventDefault, self } from "svelte/legacy";
 
   import { onMount, onDestroy } from "svelte";
   import { page } from "$app/stores";
@@ -896,14 +896,14 @@
     myReqPage = 1;
   });
 
-  run(() => {
+  $effect(() => {
     if (showForm) {
       formStart;
       formEnd;
       scheduleOverlapLoad();
     }
   });
-  run(() => {
+  $effect(() => {
     if (showForm) {
       formStart;
       formEnd;
@@ -912,7 +912,7 @@
     }
   });
   // Kontostände laden wenn Typ wechselt oder Formular öffnet
-  run(() => {
+  $effect(() => {
     if (showForm) loadBalanceForType(formType);
   });
 </script>
@@ -1417,6 +1417,15 @@
           tabindex={day.isCurrentMonth ? 0 : undefined}
           onmousedown={() => handleDayMouseDown(day.dateStr, day.isCurrentMonth)}
           onmouseenter={() => handleDayMouseEnter(day.dateStr)}
+          onkeydown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && day.isCurrentMonth) {
+              e.preventDefault();
+              formStart = day.dateStr;
+              formEnd = day.dateStr;
+              editingRequest = null;
+              showForm = true;
+            }
+          }}
         >
           <span class="cal-day-num">{day.dayNum}</span>
           {#if isHoliday && day.isCurrentMonth}
@@ -2468,12 +2477,12 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--brand-light, #eff6ff);
-    border: 1px solid var(--brand-border, #bfdbfe);
+    background: var(--color-brand-tint);
+    border: 1px solid var(--color-brand-tint-hover);
     border-radius: 8px;
     padding: 0.5rem 0.875rem;
     font-size: 0.9375rem;
-    color: var(--brand, #2563eb);
+    color: var(--color-brand);
   }
   .days-info-icon {
     font-size: 1rem;
@@ -2741,8 +2750,8 @@
   .legend-holiday-dot {
     width: 10px;
     height: 10px;
-    background: #ede7f6;
-    border: 1.5px solid #80377b;
+    background: var(--color-brand-tint);
+    border: 1.5px solid var(--color-brand);
     border-radius: 2px;
     flex-shrink: 0;
     display: inline-block;

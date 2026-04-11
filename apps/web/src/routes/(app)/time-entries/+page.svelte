@@ -1301,7 +1301,7 @@
 
   /* ── Warning button ────────────────────────────────────────────── */
   .btn-warning {
-    background: #f59e0b;
+    background: var(--color-yellow);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -1311,7 +1311,7 @@
     cursor: pointer;
   }
   .btn-warning:hover {
-    background: #d97706;
+    background: var(--color-yellow-border);
   }
 
   /* ── Kalender ─────────────────────────────────────────────────────── */
@@ -1552,19 +1552,19 @@
 
   /* Status-Farben */
   .cal-cell--ok {
-    background: #f0fdf4;
+    background: var(--color-green-bg);
   }
   .cal-cell--partial {
-    background: #fffbeb;
+    background: var(--color-yellow-bg);
   }
   .cal-cell--missing {
-    background: #fef2f2;
+    background: var(--color-red-bg);
   }
   .cal-cell--today-ok {
-    background: #f0fdf4;
+    background: var(--color-green-bg);
   }
   .cal-cell--today-partial {
-    background: #fffbeb;
+    background: var(--color-yellow-bg);
   }
 
   /* Abwesenheitsfarben – allgemein (überschreiben Status-Farben) */
@@ -1597,15 +1597,15 @@
     font-weight: 600;
   }
   .day-bal.pos {
-    color: #16a34a;
+    color: var(--color-green);
   }
   .day-bal.neg {
-    color: #dc2626;
+    color: var(--color-red);
   }
   .day-missing {
     font-size: 0.7rem;
     font-family: var(--font-mono);
-    color: #dc2626;
+    color: var(--color-red);
     opacity: 0.75;
   }
 
@@ -1810,16 +1810,6 @@
     padding: 0.15rem 0.5rem;
     border-radius: 4px;
   }
-  .btn-outline {
-    border: 1px solid #3b82f6;
-    color: #3b82f6;
-    background: white;
-    cursor: pointer;
-  }
-  .btn-outline:hover {
-    background: #eff6ff;
-  }
-
   .btn-icon {
     background: none;
     border: none;
