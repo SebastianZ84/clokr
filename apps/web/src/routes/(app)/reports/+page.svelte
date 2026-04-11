@@ -1,5 +1,6 @@
 <script lang="ts">
   import { api } from "$api/client";
+  import Pagination from "$components/ui/Pagination.svelte";
 
   interface MonthlyRow {
     employeeId: string;
@@ -39,6 +40,19 @@
   let leaveError = $state("");
 
   let pdfDownloading = $state<string | null>(null);
+
+  // Pagination for monthly report rows
+  let reportPage = $state(1);
+  let reportPageSize = $state(10);
+  let reportRows: MonthlyRow[] = $derived(monthlyReport !== null ? (monthlyReport as MonthlyReport).rows : []);
+  let pagedReportRows = $derived(
+    reportRows.slice((reportPage - 1) * reportPageSize, reportPage * reportPageSize),
+  );
+
+  $effect(() => {
+    const _len = reportRows.length;
+    reportPage = 1;
+  });
 
   const months = [
     "Januar",
@@ -346,7 +360,7 @@
             </tr>
           </thead>
           <tbody>
-            {#each monthlyReport.rows as row (row.employeeId)}
+            {#each pagedReportRows as row (row.employeeId)}
               <tr>
                 <td class="font-medium">{row.employeeName}</td>
                 <td class="font-mono">{formatHours(row.workedHours)}</td>
@@ -376,6 +390,7 @@
             {/each}
           </tbody>
         </table>
+        <Pagination total={monthlyReport?.rows.length ?? 0} bind:page={reportPage} bind:pageSize={reportPageSize} />
       </div>
     {/if}
   </div>

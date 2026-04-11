@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { authStore } from "$stores/auth";
   import { api } from "$api/client";
+  import Pagination from "$components/ui/Pagination.svelte";
 
   type InvitationStatus = "ACCEPTED" | "PENDING" | "EXPIRED" | "NONE";
   type Role = "ADMIN" | "MANAGER" | "EMPLOYEE";
@@ -109,6 +110,15 @@
       return true;
     }),
   );
+
+  let page = $state(1);
+  let pageSize = $state(10);
+  let pagedEmployees = $derived(filteredEmployees.slice((page - 1) * pageSize, page * pageSize));
+
+  $effect(() => {
+    const _len = filteredEmployees.length;
+    page = 1;
+  });
 
   onMount(loadEmployees);
 
@@ -383,7 +393,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each filteredEmployees as emp (emp.id)}
+          {#each pagedEmployees as emp (emp.id)}
             <tr class:row-inactive={!emp.user.isActive}>
               <td class="col-number">{emp.employeeNumber}</td>
               <td class="col-name">
@@ -455,6 +465,7 @@
           {/each}
         </tbody>
       </table>
+      <Pagination total={filteredEmployees.length} bind:page bind:pageSize />
     </div>
   {/if}
 </div>

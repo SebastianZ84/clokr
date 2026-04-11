@@ -5,6 +5,7 @@
   import { page } from "$app/stores";
   import { api } from "$api/client";
   import { authStore } from "$stores/auth";
+  import Pagination from "$components/ui/Pagination.svelte";
 
   // ── Typen ─────────────────────────────────────────────────────────────────
   type Status = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "CANCELLATION_REQUESTED";
@@ -851,6 +852,17 @@
     }),
   );
 
+  let currentPage = $state(1);
+  let currentPageSize = $state(10);
+  let pagedMyRequests = $derived(
+    filteredMyRequests.slice((currentPage - 1) * currentPageSize, currentPage * currentPageSize),
+  );
+
+  $effect(() => {
+    const _len = filteredMyRequests.length;
+    currentPage = 1;
+  });
+
   run(() => {
     if (showForm) {
       formStart;
@@ -1543,7 +1555,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each filteredMyRequests as req (req.id)}
+          {#each pagedMyRequests as req (req.id)}
             {@const isOwn = req.employeeId === $authStore.user?.employeeId}
             <tr id="request-{req.id}" class:highlight-row={highlightRequestId === req.id}>
               {#if isManager}
@@ -1602,6 +1614,7 @@
           {/each}
         </tbody>
       </table>
+      <Pagination total={filteredMyRequests.length} bind:page={currentPage} bind:pageSize={currentPageSize} />
     </div>
   {/if}
 {/if}<!-- Ende Liste -->
