@@ -360,6 +360,8 @@ export async function leaveRoutes(app: FastifyInstance) {
           message: `${request.employee.firstName} ${request.employee.lastName} hat einen ${typeDef.name}-Antrag gestellt (${body.startDate} – ${body.endDate})`,
           link: `/leave?request=${request.id}`,
           tenantId,
+          relatedType: "LeaveRequest",
+          relatedId: request.id,
         });
       }
 
@@ -608,6 +610,16 @@ export async function leaveRoutes(app: FastifyInstance) {
           );
         }
 
+        // Auto-dismiss manager LEAVE_REQUEST notifications for this request
+        try {
+          await app.dismissByRelated("LeaveRequest", existing.id);
+        } catch (err) {
+          app.log.warn(
+            { err, leaveRequestId: existing.id },
+            "Failed to auto-dismiss LEAVE_REQUEST notifications on cancellation review",
+          );
+        }
+
         const refreshed = await app.prisma.leaveRequest.findUnique({
           where: { id },
           include: { employee: { select: { firstName: true, lastName: true } }, leaveType: true },
@@ -783,6 +795,16 @@ export async function leaveRoutes(app: FastifyInstance) {
           link: `/leave?request=${existing.id}`,
           tenantId: requestEmployee.tenantId,
         });
+      }
+
+      // Auto-dismiss manager LEAVE_REQUEST notifications for this request
+      try {
+        await app.dismissByRelated("LeaveRequest", existing.id);
+      } catch (err) {
+        app.log.warn(
+          { err, leaveRequestId: existing.id },
+          "Failed to auto-dismiss LEAVE_REQUEST notifications on review",
+        );
       }
 
       return {
