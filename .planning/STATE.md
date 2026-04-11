@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-31 after v1.0 milestone)
 Phase: —
 Plan: —
 Status: v1.0 milestone complete — ready for next milestone planning
-Last activity: 2026-04-11 - Completed quick task 260411-086: Fix all ESLint warnings across apps/api and apps/web (0 warnings)
+Last activity: 2026-04-10 - Completed quick task 260411-2ob: leave page ignores theme — replaced hardcoded hex colors with CSS vars in leave/+page.svelte and app.css
 
 Progress: [██████████] 100%
 
@@ -49,6 +49,7 @@ None.
 | 260410-idv | Fix reports.ts to exclude anonymized/inactive employees from monthly report and DATEV export queries | 2026-04-10 | f69855a | [260410-idv-fix-reports-ts-to-exclude-anonymized-ina](./quick/260410-idv-fix-reports-ts-to-exclude-anonymized-ina/) |
 | 260411-086 | Fix all ESLint warnings across apps/api and apps/web | 2026-04-11 | 8842f34 | [260411-086-fix-all-eslint-warnings-across-apps-api-](./quick/260411-086-fix-all-eslint-warnings-across-apps-api-/) |
 | 260411-22u | UI/UX consistency fixes: tabs, typos, empty states, berichte, badge, row height, accordion, vdev, profil subtitle, warning fatigue | 2026-04-11 | 5f66f25 | [260411-22u-ui-ux-consistency-fixes-tabs-typos-empty](./quick/260411-22u-ui-ux-consistency-fixes-tabs-typos-empty/) |
+| 260411-2ob | leave page ignores theme (data-theme attribute or CSS custom properties not applied). Likely missing data-theme wrapper or hardcoded color values in leave/+page.svelte or components used there. | 2026-04-10 | 53bb9ea | [260411-2ob-leave-page-ignores-theme-data-theme-attr](./quick/260411-2ob-leave-page-ignores-theme-data-theme-attr/) |
 
 ### Blockers/Concerns
 
