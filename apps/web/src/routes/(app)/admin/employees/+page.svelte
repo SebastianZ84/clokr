@@ -68,6 +68,8 @@
   let hardDeletingEmployee: Employee | null = $state(null);
   let hardDeleting = $state(false);
   let hardDeleteError = $state("");
+  // Retention-override acknowledgement — must be ticked to enable early (force) deletion
+  let forceDeleteAck = $state(false);
 
   let isAdmin = $derived($authStore.user?.role === "ADMIN");
 
@@ -281,6 +283,7 @@
   function confirmHardDelete(emp: Employee) {
     hardDeletingEmployee = emp;
     hardDeleteError = "";
+    forceDeleteAck = false;
     showHardDeleteConfirm = true;
   }
 
@@ -289,10 +292,14 @@
     hardDeleting = true;
     hardDeleteError = "";
     try {
-      await api.delete(`/employees/${hardDeletingEmployee.id}/hard-delete`);
+      // Send forceDelete flag so admin-acknowledged early deletions bypass retention check
+      await api.delete(`/employees/${hardDeletingEmployee.id}/hard-delete`, {
+        forceDelete: forceDeleteAck,
+      });
       employees = employees.filter((e) => e.id !== hardDeletingEmployee!.id);
       showHardDeleteConfirm = false;
       hardDeletingEmployee = null;
+      forceDeleteAck = false;
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Fehler beim endgültigen Löschen";
       hardDeleteError = msg;
@@ -765,6 +772,13 @@
           Diese Aktion entfernt alle verbleibenden Daten dauerhaft (DSGVO Art. 17). Sie ist nur
           nach Ablauf der gesetzlichen Aufbewahrungsfrist (§ 147 AO, 10 Jahre) möglich.
         </p>
+        <label class="force-delete-ack">
+          <input type="checkbox" bind:checked={forceDeleteAck} />
+          <span>
+            Ich bestätige, dass die gesetzliche Aufbewahrungsfrist (10 Jahre)
+            noch nicht abgelaufen ist und ich die vorzeitige Löschung verantworte.
+          </span>
+        </label>
       </div>
       <div class="modal-footer">
         <button
@@ -773,9 +787,10 @@
             showHardDeleteConfirm = false;
             hardDeletingEmployee = null;
             hardDeleteError = "";
+            forceDeleteAck = false;
           }}>Abbrechen</button
         >
-        <button class="btn btn-danger" onclick={doHardDelete} disabled={hardDeleting}>
+        <button class="btn btn-danger" onclick={doHardDelete} disabled={!forceDeleteAck || hardDeleting}>
           {hardDeleting ? "Löschen…" : "Endgültig löschen"}
         </button>
       </div>
@@ -1055,5 +1070,25 @@
   }
   .filter-checkbox input[type="checkbox"] {
     cursor: pointer;
+  }
+
+  /* Retention-override acknowledgement checkbox in hard-delete modal */
+  .force-delete-ack {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    background: var(--color-bg-subtle);
+  }
+  .force-delete-ack input[type="checkbox"] {
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
   }
 </style>
