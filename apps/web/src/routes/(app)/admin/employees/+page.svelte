@@ -70,6 +70,8 @@
   let hardDeletingEmployee: Employee | null = $state(null);
   let hardDeleting = $state(false);
   let hardDeleteError = $state("");
+  let hardDeleteRetentionExpiresAt = $state<string | null>(null);
+  let hardDeleteForce = $state(false);
 
   let isAdmin = $derived($authStore.user?.role === "ADMIN");
 
@@ -296,6 +298,8 @@
   function confirmHardDelete(emp: Employee) {
     hardDeletingEmployee = emp;
     hardDeleteError = "";
+    hardDeleteRetentionExpiresAt = null;
+    hardDeleteForce = false;
     showHardDeleteConfirm = true;
   }
 
@@ -304,13 +308,22 @@
     hardDeleting = true;
     hardDeleteError = "";
     try {
-      await api.delete(`/employees/${hardDeletingEmployee.id}/hard-delete`);
+      const body = hardDeleteForce ? { forceDelete: true } : undefined;
+      await api.delete(`/employees/${hardDeletingEmployee.id}/hard-delete`, body);
       employees = employees.filter((e) => e.id !== hardDeletingEmployee!.id);
       showHardDeleteConfirm = false;
       hardDeletingEmployee = null;
+      hardDeleteRetentionExpiresAt = null;
+      hardDeleteForce = false;
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : "Fehler beim endgültigen Löschen";
-      hardDeleteError = msg;
+      if (e instanceof Error) {
+        hardDeleteError = e.message;
+        // Extract retentionExpiresAt from API error response data if present
+        const apiData = (e as { data?: { retentionExpiresAt?: string } }).data;
+        hardDeleteRetentionExpiresAt = apiData?.retentionExpiresAt ?? null;
+      } else {
+        hardDeleteError = "Fehler beim endgültigen Löschen";
+      }
     } finally {
       hardDeleting = false;
     }
@@ -779,8 +792,26 @@
         <h2 class="modal-title">Endgültig löschen</h2>
       </div>
       <div class="modal-body">
-        {#if hardDeleteError}
+        {#if hardDeleteError && !hardDeleteRetentionExpiresAt}
           <div class="alert alert-error mb-3">{hardDeleteError}</div>
+        {/if}
+        {#if hardDeleteRetentionExpiresAt}
+          <div class="alert alert-warning mb-3">
+            <strong>Aufbewahrungsfrist noch nicht abgelaufen.</strong> Die gesetzliche
+            Aufbewahrungsfrist (§ 147 AO, 10 Jahre) läuft ab am:
+            <strong
+              >{new Date(hardDeleteRetentionExpiresAt).toLocaleDateString("de-DE", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}</strong
+            >.
+          </div>
+          <label class="force-delete-checkbox">
+            <input type="checkbox" bind:checked={hardDeleteForce} />
+            Ich bestätige, dass ich diese Aufbewahrungsfrist kenne und den Datensatz trotzdem unwiderruflich
+            löschen möchte (z. B. Testdaten). Diese Aktion wird im Audit-Log protokolliert.
+          </label>
         {/if}
         <p>
           Den anonymisierten Datensatz von <strong>{hardDeletingEmployee.employeeNumber}</strong> endgültig
@@ -798,9 +829,15 @@
             showHardDeleteConfirm = false;
             hardDeletingEmployee = null;
             hardDeleteError = "";
+            hardDeleteRetentionExpiresAt = null;
+            hardDeleteForce = false;
           }}>Abbrechen</button
         >
-        <button class="btn btn-danger" onclick={doHardDelete} disabled={hardDeleting}>
+        <button
+          class="btn btn-danger"
+          onclick={doHardDelete}
+          disabled={hardDeleting || (hardDeleteRetentionExpiresAt !== null && !hardDeleteForce)}
+        >
           {hardDeleting ? "Löschen…" : "Endgültig löschen"}
         </button>
       </div>
@@ -1079,6 +1116,22 @@
     white-space: nowrap;
   }
   .filter-checkbox input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  .force-delete-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    cursor: pointer;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+  .force-delete-checkbox input[type="checkbox"] {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
     cursor: pointer;
   }
 </style>
