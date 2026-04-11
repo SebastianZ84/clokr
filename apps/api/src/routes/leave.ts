@@ -932,7 +932,7 @@ export async function leaveRoutes(app: FastifyInstance) {
           },
           include: {
             leaveType: true,
-            employee: { select: { firstName: true, lastName: true, userId: true } },
+            employee: { select: { id: true, firstName: true, lastName: true, userId: true } },
           },
           orderBy: { startDate: "asc" },
         }),
@@ -947,6 +947,7 @@ export async function leaveRoutes(app: FastifyInstance) {
         return {
           id: r.id,
           isOwn,
+          employeeId: r.employeeId,
           firstName: r.employee.firstName,
           lastName: r.employee.lastName,
           typeCode: showDetails

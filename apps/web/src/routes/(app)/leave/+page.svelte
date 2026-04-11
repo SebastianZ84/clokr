@@ -138,8 +138,9 @@
   // Highlighted request (from notification deep-link)
   let highlightRequestId: string | null = $state(null);
 
-  // Calendar filter: mine | others | all
-  let calFilter: "mine" | "others" | "all" = $state("all");
+  // Calendar filter — "" = Alle, "mine" = Meine, or employeeId for specific person (manager)
+  let calFilter = $state("");
+  let calEmployees: Employee[] = $state([]);
 
   // Drag-to-select date range in calendar
   let dragStart: string | null = $state(null);
@@ -185,9 +186,17 @@
   const SICK_CODES: TypeCode[] = ["SICK", "SICK_CHILD"];
 
   // ── Kalender ──────────────────────────────────────────────────────────────
+  interface Employee {
+    id: string;
+    firstName: string;
+    lastName: string;
+    employeeNumber: string;
+  }
+
   interface CalEntry {
     id: string;
     isOwn: boolean;
+    employeeId: string;
     firstName: string;
     lastName: string;
     typeCode: TypeCode | null;
@@ -374,6 +383,12 @@
     await loadData();
     loadCalendar();
     loadVacationSummary();
+
+    if (isManager) {
+      api.get<Employee[]>("/employees").then((list) => {
+        calEmployees = list;
+      }).catch(() => {});
+    }
 
     // Deep-link: view param from dashboard
     const viewParam = $page.url.searchParams.get("view");
@@ -1294,26 +1309,22 @@
             stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg
           >
         </button>
-        <div class="cal-filter" role="group" aria-label="Kalenderansicht filtern">
-          <button
-            class="cal-filter-btn"
-            class:cal-filter-btn--active={calFilter === "mine"}
-            onclick={() => (calFilter = "mine")}
-            title="Nur meine Einträge"
-          >Meine</button>
-          <button
-            class="cal-filter-btn"
-            class:cal-filter-btn--active={calFilter === "others"}
-            onclick={() => (calFilter = "others")}
-            title="Nur andere Mitarbeiter"
-          >Andere</button>
-          <button
-            class="cal-filter-btn"
-            class:cal-filter-btn--active={calFilter === "all"}
-            onclick={() => (calFilter = "all")}
-            title="Alle Einträge"
-          >Alle</button>
-        </div>
+        <select
+          class="form-input cal-emp-select"
+          value={calFilter}
+          onchange={(e) => (calFilter = e.currentTarget.value)}
+          aria-label="Kalenderansicht filtern"
+        >
+          <option value="">Alle Mitarbeiter</option>
+          <option value="mine">Meine Einträge</option>
+          {#if isManager}
+            {#each calEmployees as emp (emp.id)}
+              {#if emp.id !== $authStore.user?.employeeId}
+                <option value={emp.id}>{emp.lastName}, {emp.firstName}</option>
+              {/if}
+            {/each}
+          {/if}
+        </select>
       </div>
     </div>
 
@@ -1354,7 +1365,7 @@
             {#each absences.filter((e) => {
                 const visible = isManager || e.status === "APPROVED";
                 if (calFilter === "mine") return e.isOwn;
-                if (calFilter === "others") return !e.isOwn && visible;
+                if (calFilter !== "") return e.employeeId === calFilter;
                 return e.isOwn || visible;
               }) as e (e.id)}
               <div
@@ -2783,38 +2794,12 @@
       grid-template-columns: 1fr;
     }
   }
-  .cal-filter {
-    display: inline-flex;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
+  .cal-emp-select {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.5rem;
+    min-height: unset;
+    height: 32px;
+    width: auto;
     margin-left: auto;
-  }
-  .cal-filter-btn {
-    background: transparent;
-    border: none;
-    border-left: 1px solid var(--color-border);
-    padding: 0 0.625rem;
-    min-height: 32px;
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition:
-      background-color 0.15s,
-      color 0.15s;
-  }
-  .cal-filter-btn:first-child {
-    border-left: none;
-  }
-  .cal-filter-btn:hover {
-    background: var(--color-bg-subtle);
-    color: var(--color-text);
-  }
-  .cal-filter-btn--active {
-    background: var(--color-brand-tint);
-    color: var(--color-brand);
-    font-weight: 600;
   }
 </style>
