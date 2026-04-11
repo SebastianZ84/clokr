@@ -1550,40 +1550,6 @@
     box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-brand) 25%, transparent);
   }
 
-  /* :global nötig – Svelte doppelt den Scope-Hash bei Compound-Selektoren */
-  :global(.cal-cell.cal-selected:not(.cal-other)) {
-    background-color: var(--color-brand) !important;
-    box-shadow:
-      0 0 0 2px var(--color-brand),
-      0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    z-index: 1;
-  }
-  :global(.cal-cell.cal-selected:not(.cal-other) .cal-day-num),
-  :global(.cal-cell.cal-selected:not(.cal-other) .day-worked),
-  :global(.cal-cell.cal-selected:not(.cal-other) .day-bal),
-  :global(.cal-cell.cal-selected:not(.cal-other) .day-missing),
-  :global(.cal-cell.cal-selected:not(.cal-other) .cal-abs-type),
-  :global(.cal-cell.cal-selected:not(.cal-other) .cal-holiday-label) {
-    color: white !important;
-  }
-  /* today+selected: Ring statt volle Füllung (wie leave-Kalender) */
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other)) {
-    background-color: var(--color-brand-tint) !important;
-    box-shadow: inset 0 0 0 2px var(--color-brand) !important;
-  }
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .cal-day-num),
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .day-worked),
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .day-bal),
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .day-missing),
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .cal-abs-type),
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .cal-holiday-label) {
-    color: var(--color-text) !important;
-  }
-  :global(.cal-cell.cal-selected.cal-today:not(.cal-other) .cal-day-num) {
-    background: var(--color-brand);
-    color: white;
-  }
-
   /* Status-Farben */
   .cal-cell--ok {
     background: #f0fdf4;

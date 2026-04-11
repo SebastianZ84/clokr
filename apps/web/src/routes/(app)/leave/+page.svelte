@@ -1421,7 +1421,7 @@
           <span class="cal-day-num">{day.dayNum}</span>
           {#if isHoliday && day.isCurrentMonth}
             <div class="cal-holiday-label" title={holidays[0].typeName ?? ""}>
-              🎌 {holidays[0].firstName}
+              {holidays[0].firstName}
             </div>
           {/if}
           <div class="cal-chips">
