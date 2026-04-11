@@ -2316,38 +2316,42 @@
   .vac-summary {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 0.5rem 1rem;
+    gap: 1.5rem;
+    padding: 0.875rem 1.25rem;
     background: var(--glass-bg, rgba(255, 255, 255, 0.6));
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.5));
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     margin-bottom: 0.75rem;
     flex-wrap: wrap;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
   }
   .vac-summary-item {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.5rem;
   }
   .vac-summary-item:last-child {
     margin-left: 0;
   }
   .vac-summary-divider {
     width: 1px;
-    height: 1rem;
+    height: 1.25rem;
     background: var(--color-border);
     flex-shrink: 0;
   }
   .vac-summary-label {
     color: var(--color-text-muted);
     font-size: 0.8125rem;
+    font-weight: 500;
   }
   .vac-summary-value {
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--font-mono);
-    color: var(--color-text);
-    font-size: 0.8125rem;
+    color: var(--color-text-heading);
+    font-size: 0.9375rem;
   }
   .vac-summary-carry {
     color: var(--color-blue);
