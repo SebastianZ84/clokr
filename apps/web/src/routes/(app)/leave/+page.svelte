@@ -138,8 +138,8 @@
   // Highlighted request (from notification deep-link)
   let highlightRequestId: string | null = $state(null);
 
-  // Team absences toggle (managers/admins)
-  let showTeamAbsences = $state(true);
+  // Calendar filter: mine | others | all
+  let calFilter: "mine" | "others" | "all" = $state("all");
 
   // Drag-to-select date range in calendar
   let dragStart: string | null = $state(null);
@@ -1294,34 +1294,26 @@
             stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg
           >
         </button>
-        <button
-          class="team-toggle"
-          class:team-toggle--active={showTeamAbsences}
-          onclick={() => {
-            showTeamAbsences = !showTeamAbsences;
-          }}
-          title={showTeamAbsences
-            ? "Team-Abwesenheiten ausblenden"
-            : "Team-Abwesenheiten einblenden"}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
-              cx="9"
-              cy="7"
-              r="4"
-            /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
-          >
-          Team
-        </button>
+        <div class="cal-filter" role="group" aria-label="Kalenderansicht filtern">
+          <button
+            class="cal-filter-btn"
+            class:cal-filter-btn--active={calFilter === "mine"}
+            onclick={() => (calFilter = "mine")}
+            title="Nur meine Einträge"
+          >Meine</button>
+          <button
+            class="cal-filter-btn"
+            class:cal-filter-btn--active={calFilter === "others"}
+            onclick={() => (calFilter = "others")}
+            title="Nur andere Mitarbeiter"
+          >Andere</button>
+          <button
+            class="cal-filter-btn"
+            class:cal-filter-btn--active={calFilter === "all"}
+            onclick={() => (calFilter = "all")}
+            title="Alle Einträge"
+          >Alle</button>
+        </div>
       </div>
     </div>
 
@@ -1359,7 +1351,12 @@
             </div>
           {/if}
           <div class="cal-chips">
-            {#each absences.filter((e) => e.isOwn || (showTeamAbsences && (isManager || e.status === "APPROVED"))) as e (e.id)}
+            {#each absences.filter((e) => {
+                const visible = isManager || e.status === "APPROVED";
+                if (calFilter === "mine") return e.isOwn;
+                if (calFilter === "others") return !e.isOwn && visible;
+                return e.isOwn || visible;
+              }) as e (e.id)}
               <div
                 class="cal-chip"
                 class:cal-chip--pending={e.status === "PENDING" ||
@@ -2786,32 +2783,38 @@
       grid-template-columns: 1fr;
     }
   }
-  .team-toggle {
+  .cal-filter {
     display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.625rem;
-    min-height: 44px; /* WCAG 2.5.5 touch target */
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-left: auto;
+  }
+  .cal-filter-btn {
     background: transparent;
-    color: var(--color-text-muted);
+    border: none;
+    border-left: 1px solid var(--color-border);
+    padding: 0 0.625rem;
+    min-height: 32px;
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 500;
+    color: var(--color-text-muted);
     cursor: pointer;
     transition:
       background-color 0.15s,
-      color 0.15s,
-      border-color 0.15s;
-    margin-left: auto;
+      color 0.15s;
   }
-  .team-toggle:hover {
+  .cal-filter-btn:first-child {
+    border-left: none;
+  }
+  .cal-filter-btn:hover {
     background: var(--color-bg-subtle);
     color: var(--color-text);
   }
-  .team-toggle--active {
+  .cal-filter-btn--active {
     background: var(--color-brand-tint);
     color: var(--color-brand);
-    border-color: var(--color-brand);
+    font-weight: 600;
   }
 </style>
