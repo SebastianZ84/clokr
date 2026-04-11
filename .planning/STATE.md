@@ -5,11 +5,11 @@ milestone_name: Reporting & DATEV
 status: in_progress
 last_updated: "2026-04-11T18:47:11.868Z"
 progress:
-  total_phases: 3
+  total_phases: 4
   completed_phases: 2
   total_plans: 7
   completed_plans: 7
-  percent: 67
+  percent: 50
 ---
 
 ## Accumulated Context
@@ -18,3 +18,4 @@ progress:
 - Phase 4 added: DATEV code cleanup
 - Phase 5 added: Saldo performance & presence resolver
 - Phase 6 added: PDF Exports — Monatsbericht, Urlaubsliste, Abteilungsbericht
+- Phase 7 added: Reporting Dashboards — Überstunden, Urlaub, Anwesenheit
