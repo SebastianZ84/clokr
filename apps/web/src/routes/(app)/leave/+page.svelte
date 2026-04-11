@@ -1510,7 +1510,7 @@
     </div>
 
     <div class="table-wrapper">
-      <table class="data-table leave-requests-table">
+      <table class="data-table">
         <thead>
           <tr>
             {#if isManager}<th>Mitarbeiter</th>{/if}
@@ -2564,11 +2564,11 @@
   }
 
   .cal-cell {
-    background: #fff;
+    background: var(--color-surface);
     min-height: 72px;
     padding: 0.3rem 0.4rem 0.4rem;
-    border-right: 1px solid var(--gray-100, #f3f4f6);
-    border-bottom: 1px solid var(--gray-100, #f3f4f6);
+    border-right: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-subtle);
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -2585,25 +2585,25 @@
     background: var(--gray-50, #f9fafb) !important;
   }
   :global(.cal-cell.cal-weekend:not(.cal-other)) {
-    background: #f4f0fa;
+    background: var(--color-bg-subtle);
   }
   .cal-today {
     box-shadow: inset 0 0 0 2px var(--color-brand);
   }
   .cal-holiday {
-    background: #ede7f6 !important;
-    border-left: 3px solid #80377b;
+    background: var(--color-brand-tint) !important;
+    border-left: 3px solid var(--color-brand);
   }
 
   .cal-cell--current {
     cursor: pointer;
   }
   .cal-cell--current:hover {
-    background: var(--color-bg-subtle, #f3f0ff);
+    background: var(--color-bg-subtle);
   }
   .cal-cell--drag-selected {
-    background: var(--color-brand-tint, rgba(109, 40, 217, 0.1)) !important;
-    outline: 2px solid var(--color-brand, #6d28d9);
+    background: var(--color-brand-tint) !important;
+    outline: 2px solid var(--color-brand);
     outline-offset: -2px;
   }
 
@@ -2629,7 +2629,7 @@
 
   .cal-holiday-label {
     font-size: 0.6875rem;
-    color: #6b21a8;
+    color: var(--color-brand);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -2682,7 +2682,7 @@
     display: flex;
     gap: 1rem;
     padding: 0.6rem 1rem;
-    border-top: 1px solid var(--gray-100, #f3f4f6);
+    border-top: 1px solid var(--color-border-subtle);
     flex-wrap: wrap;
   }
   .legend-item {
@@ -2702,8 +2702,8 @@
   .legend-holiday-dot {
     width: 10px;
     height: 10px;
-    background: #ede7f6;
-    border: 1.5px solid #80377b;
+    background: var(--color-brand-tint);
+    border: 1.5px solid var(--color-brand);
     border-radius: 2px;
     flex-shrink: 0;
     display: inline-block;
@@ -2803,17 +2803,5 @@
     background: var(--color-brand-tint);
     color: var(--color-brand);
     border-color: var(--color-brand);
-  }
-
-  /* ── Compact leave-requests table ── */
-  .leave-requests-table th {
-    padding: 0.5rem 1rem;
-  }
-  .leave-requests-table td {
-    padding: 0.5rem 1rem;
-    line-height: 1.35;
-  }
-  .leave-requests-table .action-cell {
-    white-space: nowrap;
   }
 </style>
