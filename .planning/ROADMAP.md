@@ -47,7 +47,7 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full details.
 - [x] Phase 11: Schema Bug Fixes — MONTHLY_HOURS (2/2 plans) — completed 2026-04-13
 - [x] Phase 12: Monatsabschluss Lock Enforcement (3/3 plans) — completed 2026-04-13
 - [ ] Phase 13: Overtime Handling Mode — CARRY_FORWARD / TRACK_ONLY (0/0 plans)
-- [ ] Phase 14: Weekday Configuration & Per-Day Soll (0/0 plans)
+- [ ] Phase 14: Weekday Configuration & Per-Day Soll (0/2 plans)
 - [ ] Phase 15: Tenant Holiday Deduction Configuration (0/0 plans)
 
 </details>
@@ -69,7 +69,7 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full details.
 | 11. Schema Bug Fixes          | v1.3 | 2/2 | Complete | 2026-04-13 |
 | 12. Lock Enforcement          | v1.3 | 3/3 | Complete | 2026-04-13 |
 | 13. Overtime Handling Mode    | v1.3 | 3/3 | Complete   | 2026-04-13 |
-| 14. Weekday Config & Per-Day Soll | v1.3 | 0/? | Not Started | — |
+| 14. Weekday Config & Per-Day Soll | v1.3 | 0/2 | Planned | — |
 | 15. Tenant Holiday Deduction  | v1.3 | 0/? | Not Started | — |
 
 ### Phase 12: Monatsabschluss Lock Enforcement
@@ -87,9 +87,14 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full details.
 
 ### Phase 14: Weekday Configuration & Per-Day Soll
 
-**Goal:** Allow admins to configure which weekdays a MONTHLY_HOURS employee regularly works, and display a per-day Soll in the calendar (budget ÷ working days in month).
+**Goal:** Allow admins to configure which weekdays a MONTHLY_HOURS employee regularly works, and display a per-day Soll in the calendar (budget / working days in month).
 **Requirements**: SCHED-04, SCHED-05
 **Depends on:** Phase 13
+**Plans:** 2 plans
+
+Plans:
+- [ ] 14-01-PLAN.md — API tests + saveEmployee bug fix + weekday toggle chip picker
+- [ ] 14-02-PLAN.md — Calendar per-day Soll computation and display
 
 ### Phase 15: Tenant Holiday Deduction Configuration
 
