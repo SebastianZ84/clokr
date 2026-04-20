@@ -42,11 +42,11 @@
   "devDependencies": {
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^8.0.0",
-    "@types/pdfkit": "^0.17.5",
+    "@types/pdfkit": "^0.17.6",
     "@types/pg": "^8.20.0",
     "dotenv": "^16.6.1",
     "fastify-plugin": "^5.1.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   }
 }
