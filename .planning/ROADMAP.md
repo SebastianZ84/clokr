@@ -98,7 +98,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 18-01-PLAN.md — Add Team-Zeiten and Team-Abwesenheiten nav items to sidebar (NAV-05)
+- [x] 18-01-PLAN.md — Add Team-Zeiten and Team-Abwesenheiten nav items to sidebar (NAV-05)
 - [ ] 18-02-PLAN.md — Create team layout role guard and placeholder pages (NAV-03, NAV-04)
 **UI hint**: yes
 
@@ -182,7 +182,7 @@ Plans:
 | 15. Tenant Holiday Deduction | v1.3 | 3/3 | Complete | 2026-04-13 |
 | 16. BUrlG H2 Exit Rule | v1.3 | 2/2 | Complete | 2026-04-25 |
 | 17. Personal Page Cleanup | v1.4 | 2/2 | Complete   | 2026-04-25 |
-| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 0/2 | Planned | - |
+| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 1/2 | In Progress|  |
 | 19. Team Time-Entries Page | v1.4 | 0/TBD | Not started | - |
 | 20. Team Leave Page | v1.4 | 0/TBD | Not started | - |
 | 21. Per-Employee Export API | v1.4 | 0/TBD | Not started | - |
