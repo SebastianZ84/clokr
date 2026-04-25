@@ -95,7 +95,11 @@ Plans:
   2. A manager sees a "Team-Abwesenheiten" link in the sidebar that navigates to `/team/leave`
   3. An employee (non-manager) does not see the MANAGER sidebar group
   4. Navigating directly to `/team/time-entries` or `/team/leave` as an employee shows an access-denied state
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 18-01-PLAN.md — Add Team-Zeiten and Team-Abwesenheiten nav items to sidebar (NAV-05)
+- [ ] 18-02-PLAN.md — Create team layout role guard and placeholder pages (NAV-03, NAV-04)
 **UI hint**: yes
 
 ### Phase 19: Team Time-Entries Page
@@ -178,7 +182,7 @@ Plans:
 | 15. Tenant Holiday Deduction | v1.3 | 3/3 | Complete | 2026-04-13 |
 | 16. BUrlG H2 Exit Rule | v1.3 | 2/2 | Complete | 2026-04-25 |
 | 17. Personal Page Cleanup | v1.4 | 2/2 | Complete   | 2026-04-25 |
-| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 0/TBD | Not started | - |
+| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 0/2 | Planned | - |
 | 19. Team Time-Entries Page | v1.4 | 0/TBD | Not started | - |
 | 20. Team Leave Page | v1.4 | 0/TBD | Not started | - |
 | 21. Per-Employee Export API | v1.4 | 0/TBD | Not started | - |
