@@ -142,7 +142,10 @@ Plans:
   2. The DATEV TXT output passes the same CP1252/CRLF/INI-section format checks as the company-wide export
   3. A manager can download a tabular PDF Stundennachweis for a single employee and a specific month via a GET request
   4. The PDF lists each day with start time, end time, break minutes, and worked hours in the correct month
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 21-01-PLAN.md — Extract buildDatevLodas() + add per-employee DATEV endpoint (RPT-03, RPT-04)
 
 ### Phase 22: Reports Page Redesign
 **Goal**: The Reports page is fully redesigned with glass-card layout, a month/year period selector on every widget, and export buttons wired to the per-employee endpoints
@@ -191,7 +194,7 @@ Plans:
 | 18. Team Route Scaffold & Sidebar Nav | v1.4 | 2/2 | Complete   | 2026-04-25 |
 | 19. Team Time-Entries Page | v1.4 | 0/1 | Not started | - |
 | 20. Team Leave Page | v1.4 | 1/1 | Complete   | 2026-04-25 |
-| 21. Per-Employee Export API | v1.4 | 0/TBD | Not started | - |
+| 21. Per-Employee Export API | v1.4 | 0/1 | Not started | - |
 | 22. Reports Page Redesign | v1.4 | 0/TBD | Not started | - |
 | 23. Glass-Card UI Polish | v1.4 | 0/TBD | Not started | - |
 
