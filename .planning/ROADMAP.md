@@ -127,7 +127,10 @@ Plans:
   2. A manager can approve a pending leave request and the status changes to APPROVED immediately
   3. A manager can reject a pending leave request with an optional reason and the status changes to REJECTED
   4. Approved and rejected requests are shown in a separate historical list
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 20-01-PLAN.md — Replace placeholder with full team leave page (TEAM-03)
 **UI hint**: yes
 
 ### Phase 21: Per-Employee Export API
@@ -187,7 +190,7 @@ Plans:
 | 17. Personal Page Cleanup | v1.4 | 2/2 | Complete   | 2026-04-25 |
 | 18. Team Route Scaffold & Sidebar Nav | v1.4 | 2/2 | Complete   | 2026-04-25 |
 | 19. Team Time-Entries Page | v1.4 | 0/1 | Not started | - |
-| 20. Team Leave Page | v1.4 | 0/TBD | Not started | - |
+| 20. Team Leave Page | v1.4 | 0/1 | Not started | - |
 | 21. Per-Employee Export API | v1.4 | 0/TBD | Not started | - |
 | 22. Reports Page Redesign | v1.4 | 0/TBD | Not started | - |
 | 23. Glass-Card UI Polish | v1.4 | 0/TBD | Not started | - |
