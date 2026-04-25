@@ -2,33 +2,33 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Manager/MA-Trennung & Reports
-status: verifying
-stopped_at: Completed 18-team-route-scaffold-sidebar-nav/18-02-PLAN.md
-last_updated: "2026-04-25T20:21:39.147Z"
-last_activity: 2026-04-25
+status: executing
+stopped_at: Completed 19-team-time-entries-page/19-01-PLAN.md
+last_updated: "2026-04-25T20:36:16Z"
+last_activity: 2026-04-25 -- Phase 19 complete (19-01 team time-entries page)
 progress:
   total_phases: 7
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 100
+  completed_phases: 3
+  total_plans: 6
+  completed_plans: 5
+  percent: 83
 ---
 
 ## Current Position
 
-Phase: 18 (Team Route Scaffold & Sidebar Nav) — EXECUTING
-Plan: 2 of 2
-Status: Phase complete — ready for verification
-Last activity: 2026-04-25
+Phase: 19 (Team Time-Entries Page) — COMPLETE
+Plan: 1 of 1 — DONE
+Status: Phase 19 complete — all 1 plan executed
+Last activity: 2026-04-25 -- Phase 19 complete (19-01 team time-entries page)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [████████░░] 83%
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Reliable, secure, legally compliant time tracking SaaS ready for live customers
-**Current focus:** Phase 18 — Team Route Scaffold & Sidebar Nav
+**Current focus:** Phase 19 — Team Time-Entries Page
 
 ## Performance Metrics
 
@@ -63,6 +63,9 @@ Recent decisions affecting v1.4:
 - [Phase 18-team-route-scaffold-sidebar-nav]: Team nav items inserted before Berichte/Admin so team tools are discoverable first in manager sidebar
 - [Phase 18-team-route-scaffold-sidebar-nav]: Team layout is transparent pass-through (no chrome/tabs) — individual pages own their layout
 - [Phase 18-team-route-scaffold-sidebar-nav]: Placeholder pages intentionally scaffold for Phase 19 and 20 full implementations
+- [Phase 19-team-time-entries-page]: Fork personal page rather than build from scratch — ensures full feature parity (ArbZG, lock enforcement, MONTHLY_HOURS, break slots)
+- [Phase 19-team-time-entries-page]: onMount defers loadAll() until employee selected — no wasted API call on page load
+- [Phase 19-team-time-entries-page]: Manager POST uses source=CORRECTION (not MANUAL) to distinguish manager corrections in audit trail
 
 ### Pending Todos
 
@@ -74,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T20:21:39.143Z
-Stopped at: Completed 18-team-route-scaffold-sidebar-nav/18-02-PLAN.md
+Last session: 2026-04-25T20:36:16Z
+Stopped at: Completed 19-team-time-entries-page/19-01-PLAN.md
 Resume file: None
