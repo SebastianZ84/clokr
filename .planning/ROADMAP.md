@@ -61,7 +61,7 @@ See `.planning/milestones/v1.3-ROADMAP.md` for full details.
 **Milestone Goal:** Clean separation between personal employee views and manager team views, with a modernised Reports page and per-employee export endpoints.
 
 - [x] **Phase 17: Personal Page Cleanup** — Remove employee selector and team approval tab from personal pages (completed 2026-04-25)
-- [ ] **Phase 18: Team Route Scaffold & Sidebar Nav** — Create `/team/*` routes and MANAGER sidebar group
+- [x] **Phase 18: Team Route Scaffold & Sidebar Nav** — Create `/team/*` routes and MANAGER sidebar group (completed 2026-04-25)
 - [ ] **Phase 19: Team Time-Entries Page** — Manager view of team time entries with correction workflow
 - [ ] **Phase 20: Team Leave Page** — Manager view of team leave requests with approval/rejection
 - [ ] **Phase 21: Per-Employee Export API** — Single-employee DATEV LODAS and PDF export endpoints
@@ -99,7 +99,7 @@ Plans:
 
 Plans:
 - [x] 18-01-PLAN.md — Add Team-Zeiten and Team-Abwesenheiten nav items to sidebar (NAV-05)
-- [ ] 18-02-PLAN.md — Create team layout role guard and placeholder pages (NAV-03, NAV-04)
+- [x] 18-02-PLAN.md — Create team layout role guard and placeholder pages (NAV-03, NAV-04)
 **UI hint**: yes
 
 ### Phase 19: Team Time-Entries Page
@@ -112,7 +112,10 @@ Plans:
   3. A manager can create a new time entry on behalf of a team member and the entry appears in that employee's calendar
   4. A manager can edit an existing time entry for a team member and the change is saved
   5. Typing a name fragment in the employee search filters the dropdown list in real time
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 19-01-PLAN.md — Replace placeholder with full team time-entries page (TEAM-01, TEAM-02, TEAM-04)
 **UI hint**: yes
 
 ### Phase 20: Team Leave Page
@@ -182,8 +185,8 @@ Plans:
 | 15. Tenant Holiday Deduction | v1.3 | 3/3 | Complete | 2026-04-13 |
 | 16. BUrlG H2 Exit Rule | v1.3 | 2/2 | Complete | 2026-04-25 |
 | 17. Personal Page Cleanup | v1.4 | 2/2 | Complete   | 2026-04-25 |
-| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 1/2 | In Progress|  |
-| 19. Team Time-Entries Page | v1.4 | 0/TBD | Not started | - |
+| 18. Team Route Scaffold & Sidebar Nav | v1.4 | 2/2 | Complete   | 2026-04-25 |
+| 19. Team Time-Entries Page | v1.4 | 0/1 | Not started | - |
 | 20. Team Leave Page | v1.4 | 0/TBD | Not started | - |
 | 21. Per-Employee Export API | v1.4 | 0/TBD | Not started | - |
 | 22. Reports Page Redesign | v1.4 | 0/TBD | Not started | - |

@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Manager/MA-Trennung & Reports
-status: executing
-stopped_at: Completed 18-team-route-scaffold-sidebar-nav-18-01-PLAN.md
-last_updated: "2026-04-25T20:20:53.847Z"
+status: verifying
+stopped_at: Completed 18-team-route-scaffold-sidebar-nav/18-02-PLAN.md
+last_updated: "2026-04-25T20:21:39.147Z"
 last_activity: 2026-04-25
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 75
+  completed_plans: 4
+  percent: 100
 ---
 
 ## Current Position
 
 Phase: 18 (Team Route Scaffold & Sidebar Nav) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-25
 
 Progress: [░░░░░░░░░░] 0%
@@ -61,6 +61,8 @@ Recent decisions affecting v1.4:
 - [Phase 17-personal-page-cleanup]: Personal time-entries page now uses ownEmployeeId directly with no selectedEmployeeId indirection — own-data-only scope
 - [Phase 17-personal-page-cleanup]: iCal team export ungated from isManager — all employees can download team absence calendar
 - [Phase 18-team-route-scaffold-sidebar-nav]: Team nav items inserted before Berichte/Admin so team tools are discoverable first in manager sidebar
+- [Phase 18-team-route-scaffold-sidebar-nav]: Team layout is transparent pass-through (no chrome/tabs) — individual pages own their layout
+- [Phase 18-team-route-scaffold-sidebar-nav]: Placeholder pages intentionally scaffold for Phase 19 and 20 full implementations
 
 ### Pending Todos
 
@@ -72,6 +74,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T20:20:53.843Z
-Stopped at: Completed 18-team-route-scaffold-sidebar-nav-18-01-PLAN.md
+Last session: 2026-04-25T20:21:39.143Z
+Stopped at: Completed 18-team-route-scaffold-sidebar-nav/18-02-PLAN.md
 Resume file: None

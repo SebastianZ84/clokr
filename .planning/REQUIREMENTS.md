@@ -9,8 +9,8 @@
 
 - [x] **NAV-01**: Personal time-entries page shows only own data (employee selector removed)
 - [x] **NAV-02**: Personal leave page shows only own requests (team approval tab removed)
-- [ ] **NAV-03**: Manager can access dedicated team time-entries page at `/team/time-entries`
-- [ ] **NAV-04**: Manager can access dedicated team leave page at `/team/leave`
+- [x] **NAV-03**: Manager can access dedicated team time-entries page at `/team/time-entries`
+- [x] **NAV-04**: Manager can access dedicated team leave page at `/team/leave`
 - [x] **NAV-05**: Sidebar MANAGER group shows "Team-Zeiten" and "Team-Abwesenheiten" nav items
 
 ### Team
@@ -59,8 +59,8 @@
 |-------------|-------|--------|
 | NAV-01 | Phase 17 | Complete |
 | NAV-02 | Phase 17 | Complete |
-| NAV-03 | Phase 18 | Pending |
-| NAV-04 | Phase 18 | Pending |
+| NAV-03 | Phase 18 | Complete |
+| NAV-04 | Phase 18 | Complete |
 | NAV-05 | Phase 18 | Complete |
 | TEAM-01 | Phase 19 | Pending |
 | TEAM-02 | Phase 19 | Pending |
