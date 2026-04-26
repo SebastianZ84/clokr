@@ -66,7 +66,7 @@ See `.planning/milestones/v1.3-ROADMAP.md` for full details.
 - [x] **Phase 20: Team Leave Page** — Manager view of team leave requests with approval/rejection (completed 2026-04-25)
 - [x] **Phase 21: Per-Employee Export API** — Single-employee DATEV LODAS and PDF export endpoints (completed 2026-04-25)
 - [ ] **Phase 22: Reports Page Redesign** — Glass-design modernization with period selector and export buttons
-- [ ] **Phase 23: Glass-Card UI Polish** — Schichten and NFC-Terminal pages get glass-card frames
+- [x] **Phase 23: Glass-Card UI Polish** — Schichten and NFC-Terminal pages get glass-card frames (completed 2026-04-25)
 
 ## Phase Details
 
@@ -173,7 +173,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 23-01-PLAN.md — Apply glass tokens to Schichten grid wrapper + extract NFC section into own card (UI-01, UI-02)
+- [x] 23-01-PLAN.md — Apply glass tokens to Schichten grid wrapper + extract NFC section into own card (UI-01, UI-02)
 **UI hint**: yes
 
 ## Progress
@@ -202,7 +202,7 @@ Plans:
 | 20. Team Leave Page | v1.4 | 1/1 | Complete   | 2026-04-25 |
 | 21. Per-Employee Export API | v1.4 | 1/1 | Complete   | 2026-04-25 |
 | 22. Reports Page Redesign | v1.4 | 0/1 | Not started | - |
-| 23. Glass-Card UI Polish | v1.4 | 0/1 | Not started | - |
+| 23. Glass-Card UI Polish | v1.4 | 1/1 | Complete   | 2026-04-25 |
 
 ## Backlog
 

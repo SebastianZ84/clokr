@@ -29,8 +29,8 @@
 
 ### UI Polish
 
-- [ ] **UI-01**: Schichten page has Glass-Card frame
-- [ ] **UI-02**: NFC-Terminal overview page has Glass-Card frame
+- [x] **UI-01**: Schichten page has Glass-Card frame
+- [x] **UI-02**: NFC-Terminal overview page has Glass-Card frame
 
 ## Future Requirements
 
@@ -70,8 +70,8 @@
 | RPT-04 | Phase 21 | Complete |
 | RPT-01 | Phase 22 | Pending |
 | RPT-02 | Phase 22 | Pending |
-| UI-01 | Phase 23 | Pending |
-| UI-02 | Phase 23 | Pending |
+| UI-01 | Phase 23 | Complete |
+| UI-02 | Phase 23 | Complete |
 
 **Coverage:**
 - v1.4 requirements: 15 total

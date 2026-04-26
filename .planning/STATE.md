@@ -3,20 +3,20 @@ gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Manager/MA-Trennung & Reports
 status: verifying
-stopped_at: Completed 21-per-employee-export-api/21-01-PLAN.md
-last_updated: "2026-04-25T21:02:52.082Z"
+stopped_at: Completed 23-glass-card-ui-polish-01-PLAN.md
+last_updated: "2026-04-25T21:25:28.215Z"
 last_activity: 2026-04-25
 progress:
   total_phases: 7
-  completed_phases: 5
-  total_plans: 7
-  completed_plans: 7
+  completed_phases: 7
+  total_plans: 9
+  completed_plans: 9
   percent: 100
 ---
 
 ## Current Position
 
-Phase: 21 (Per-Employee Export API) — EXECUTING
+Phase: 23 (Glass-Card UI Polish) — EXECUTING
 Plan: 1 of 1
 Status: Phase complete — ready for verification
 Last activity: 2026-04-25
@@ -28,7 +28,7 @@ Progress: [████████░░] 83%
 See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Reliable, secure, legally compliant time tracking SaaS ready for live customers
-**Current focus:** Phase 21 — Per-Employee Export API
+**Current focus:** Phase 23 — Glass-Card UI Polish
 
 ## Performance Metrics
 
@@ -68,6 +68,7 @@ Recent decisions affecting v1.4:
 - [Phase 19-team-time-entries-page]: Manager POST uses source=CORRECTION (not MANUAL) to distinguish manager corrections in audit trail
 - [Phase 20-team-leave-page]: Team leave page forks personal leave page: no submit form, team-wide data, approval code restored from pre-Phase-17 history
 - [Phase 21-per-employee-export-api]: buildDatevLodas() kept module-scope (not exported) to avoid leaking DATEV format details outside reports.ts
+- [Phase 23-glass-card-ui-polish]: Promoted NFC-Terminals h3/p title to section-label div to match API Keys reference pattern
 
 ### Pending Todos
 
@@ -79,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-25T21:02:52.079Z
-Stopped at: Completed 21-per-employee-export-api/21-01-PLAN.md
+Last session: 2026-04-25T21:25:28.212Z
+Stopped at: Completed 23-glass-card-ui-polish-01-PLAN.md
 Resume file: None
